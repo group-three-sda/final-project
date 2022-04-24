@@ -37,6 +37,10 @@ class CustomAccountManager(BaseUserManager):
 
 
 class Profile(AbstractBaseUser, PermissionsMixin):
+    """
+    Standard User model changed into this one,
+    User have to log by email.
+    """
     email = models.EmailField(verbose_name='email', max_length=80, unique=True)
     user_name = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=50)
