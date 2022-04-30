@@ -1,65 +1,113 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from phonenumber_field.modelfields import PhoneNumberField
-import datetime
-
-# Create your models here.
-
-
-class CustomAccountManager(BaseUserManager):
-
-    def create_superuser(self, email, user_name, password, **other_fields):
-        other_fields.setdefault('is_staff', True)
-        other_fields.setdefault('is_superuser', True)
-        if other_fields.get('is_staff') is not True:
-            raise ValueError(
-                'Superuser must be assigned to is_staff=True.'
-            )
-        if other_fields.get('is_superuser') is not True:
-            raise ValueError(
-                'Superuser must be assigned to is_superuser=True.'
-            )
-        return self.create_user(email, user_name, password, **other_fields)
-
-    def create_user(self, email, user_name, password, **other_fields):
-        if not email:
-            raise ValueError("Users must have an email address.")
-        if not user_name:
-            raise ValueError("Users must have an username.")
-        email = self.normalize_email(email)
-        user = self.model(
-            email=email,
-            user_name=user_name,
-            **other_fields)
-        user.set_password(password)
-        user.save()
-        return user
+from account.models import Profile
+from datetime import datetime
 
 
-class Profile(AbstractBaseUser, PermissionsMixin):
-    """
-    Standard User model changed into this one,
-    User have to log by email.
-    """
-    email = models.EmailField(verbose_name='email', max_length=80, unique=True)
-    user_name = models.CharField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=100)
-    data_joined = models.DateTimeField(verbose_name='data joined', auto_now_add=True)
-    last_login = models.DateTimeField(verbose_name="last_login", auto_now=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    phone_number = PhoneNumberField(blank=True, null=True)
+class Address(models.Model):
+    city = models.CharField(max_length=50)
+    postal_code = models.CharField(max_length=6)
+    street_name = models.CharField(max_length=50)
+    street_number = models.CharField(max_length=50)
+    apartment_number = models.CharField(max_length=5, blank=True, null=True)
 
-    objects = CustomAccountManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['user_name']
 
     class Meta:
-        verbose_name = "Profile"
-        verbose_name_plural = "Profiles"
+        verbose_name = 'address'
+        verbose_name_plural = 'addresses'
 
     def __str__(self):
-        return f"{self.email}"
+        return f'({self.city} {self.street_name} {self.street_number})'
+
+class Category(models.Model):
+    category_name = models.CharField(max_length=40)
+    photo = models.ImageField(blank=True, null=True, upload_to='static/category_image')
+
+
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
+
+    def __str__(self):
+        return f'{self.category_name}'
+
+class Company(models.Model):
+    company_name = models.CharField(max_length=128)
+    photo = models.ImageField(blank=True, null=True, upload_to='media/company_photo/')
+    description = models.TextField(blank=True, null=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category)
+
+    class Meta:
+        verbose_name = 'company'
+        verbose_name_plural = 'companies'
+
+    def __str__(self):
+        return f'{self.company_name}'
+
+class CompanyDay(models.Model):
+    date = models.DateField()
+    company = models.OneToOneField(Company, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        verbose_name = 'companyday'
+        verbose_name_plural = 'companydays'
+
+    def __str__(self):
+        return f'({self.company} {self.date})'
+
+class Schedule(models.Model):
+    day_of_week = models.CharField(max_length=20)
+    open_time = models.TimeField()
+    close_time = models.TimeField()
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'schedule'
+        verbose_name_plural = 'schedules'
+
+    def __str__(self):
+        return f'{self.company} {self.day_of_week}'
+
+class Service(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.TextField()
+    time = models.TimeField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        verbose_name = 'service'
+        verbose_name_plural = 'services'
+
+    def __str__(self):
+        return f'{self.name}'
+
+class TimeSlot(models.Model):
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    status = models.BooleanField(default=True)
+    company_day = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        verbose_name = 'timeslot'
+        verbose_name_plural = 'timeslots'
+
+    def __str__(self):
+        return f'({self.company_day.company_name}; [Available: {self.status} Id: {self.pk}]; ({self.start_time} - {self.end_time}))'
+
+class Appointment(models.Model):
+    note = models.CharField(max_length=128)
+    user = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
+    time_slot = models.ForeignKey(TimeSlot, on_delete=models.DO_NOTHING)
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        verbose_name = 'appointment'
+        verbose_name_plural = 'appointments'
+
+    def __str__(self):
+        return f'(Id: {self.pk} {self.user})'
