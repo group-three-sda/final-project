@@ -21,7 +21,7 @@ class Address(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=40)
-    photo = models.ImageField(blank=True, null=True, upload_to='static/category_image')
+    photo = models.ImageField(blank=True, null=True, upload_to='category_image')
 
 
     class Meta:
@@ -33,7 +33,7 @@ class Category(models.Model):
 
 class Company(models.Model):
     company_name = models.CharField(max_length=128)
-    photo = models.ImageField(blank=True, null=True, upload_to='media/company_photo/')
+    photo = models.ImageField(blank=True, null=True, upload_to='company_photo/')
     description = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
