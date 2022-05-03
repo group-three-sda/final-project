@@ -20,7 +20,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("snapvisit.urls", namespace='snapvisit'))
+    path('', include("snapvisit.urls", namespace='snapvisit')),
+    path('account/', include("account.urls", namespace='account')),
+    path('account/', include('django.contrib.auth.urls'))
 ]
 
 if settings.DEBUG:
