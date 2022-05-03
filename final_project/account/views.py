@@ -7,7 +7,6 @@ from .models import Profile
 
 
 class CreateProfileView(CreateView):
-    model = Profile
     form_class = RegistrationProfileForm
     template_name = 'account/registration_form.html'
     success_url = reverse_lazy('snapvisit:home-page')
