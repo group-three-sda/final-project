@@ -20,7 +20,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("snapvisit.urls", namespace='snapvisit'))
+    path('', include("snapvisit.urls", namespace='snapvisit')),
+    path('account/', include("account.urls", namespace='account'))
 ]
 
 if settings.DEBUG:
