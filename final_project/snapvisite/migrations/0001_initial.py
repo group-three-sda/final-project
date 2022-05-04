@@ -49,8 +49,8 @@ class Migration(migrations.Migration):
                 ('photo', models.ImageField(blank=True, null=True, upload_to='media/company_photo/')),
                 ('description', models.TextField(blank=True, null=True)),
                 ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('address', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='snapvisit.address')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisit.category')),
+                ('address', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='snapvisite.address')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisite.category')),
                 ('owner', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
                 ('start_time', models.TimeField()),
                 ('end_time', models.TimeField()),
                 ('status', models.BooleanField(default=True)),
-                ('company_day', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisit.company')),
+                ('company_day', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisite.company')),
             ],
             options={
                 'verbose_name': 'timeslot',
@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField()),
                 ('time', models.TimeField()),
                 ('price', models.DecimalField(decimal_places=2, max_digits=6)),
-                ('company', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisit.company')),
+                ('company', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisite.company')),
             ],
             options={
                 'verbose_name': 'service',
@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
                 ('day_of_week', models.CharField(max_length=20)),
                 ('open_time', models.TimeField()),
                 ('close_time', models.TimeField()),
-                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='snapvisit.company')),
+                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='snapvisite.company')),
             ],
             options={
                 'verbose_name': 'schedule',
@@ -106,7 +106,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField()),
-                ('company', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisit.company')),
+                ('company', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisite.company')),
             ],
             options={
                 'verbose_name': 'companyday',
@@ -118,8 +118,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('note', models.CharField(max_length=128)),
-                ('service', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisit.service')),
-                ('time_slot', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisit.timeslot')),
+                ('service', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisite.service')),
+                ('time_slot', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='snapvisite.timeslot')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to=settings.AUTH_USER_MODEL)),
             ],
             options={
