@@ -21,7 +21,7 @@ class Address(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=40)
-    photo = models.ImageField(blank=True, null=True, upload_to='static/category_image')
+    photo = models.ImageField(blank=True, null=True, upload_to='category_image')
 
     class Meta:
         verbose_name = 'category'
@@ -33,7 +33,7 @@ class Category(models.Model):
 
 class Company(models.Model):
     company_name = models.CharField(max_length=128)
-    photo = models.ImageField(blank=True, null=True, upload_to='media/company_photo/')
+    photo = models.ImageField(blank=True, null=True, upload_to='company_photo/')
     description = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
@@ -93,7 +93,7 @@ class TimeSlot(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     status = models.BooleanField(default=True)
-    company_day = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
+    company_day = models.ForeignKey(CompanyDay, on_delete=models.DO_NOTHING)
 
     class Meta:
         verbose_name = 'timeslot'
