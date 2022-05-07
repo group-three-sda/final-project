@@ -1,9 +1,5 @@
 {% extends 'snapvisite/base.html' %}
 
-{% block title %}
-    Strona Główna
-{% endblock title %}
-
 {% block content %}
 <div class="container-fluid mx-auto" style="background-color: #CAF7F6;border: 1px solid gray;">
   <br>
@@ -41,11 +37,10 @@
               <li><p style="font-size:18px;">Able to add an <strong>opinion</strong> for your favourite salon.</p></li>
             </ul>
             <div class="text-center">
-              <a href="{% url 'account:registration' %}"><button class="btn btn-lg btn-outline-dark mx-auto" style="background-color: white; color: black;""> Registration </button></a>
+              <a href="{% url 'account:registration' %}"><button class="btn btn-lg btn-outline-dark mx-auto" style="background-color: white; color: black;"> Registration </button></a>
             </div>
           </div>
         </div>
       </div>
   </div>
-</div>
 {% endblock content %}
