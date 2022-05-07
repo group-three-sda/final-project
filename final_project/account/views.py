@@ -11,7 +11,3 @@ class CreateProfileView(CreateView):
     template_name = 'account/registration_form.html'
     success_url = reverse_lazy('snapvisite:home-page')
 
-
-class LoginView(TemplateView):
-    template_name = 'registration/login.html'
-    success_url = reverse_lazy('snapvisite:home-page')
