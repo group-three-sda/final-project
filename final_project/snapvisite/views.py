@@ -1,5 +1,7 @@
-from django.views.generic import TemplateView
+from django.views.generic import ListView
+from .models import Category
 
 
-class BaseView(TemplateView):
+class BaseView(ListView):
+    model = Category
     template_name = "snapvisite/base.html"
