@@ -2,6 +2,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from account.models import Profile
 from datetime import datetime
+import uuid
 
 
 class Address(models.Model):
@@ -31,9 +32,14 @@ class Category(models.Model):
         return f'{self.category_name}'
 
 
+def save_photo(instance, filename):
+    filename = f'{uuid.uuid1()}_{filename}'
+    return f'company_photos/{instance.company_name}_{instance.id}/{filename}'
+
+
 class Company(models.Model):
     company_name = models.CharField(max_length=128)
-    photo = models.ImageField(blank=True, null=True, upload_to=f'company_photo/{company_name}')
+    photo = models.ImageField(blank=True, null=True, upload_to=save_photo)
     description = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
