@@ -33,7 +33,7 @@ class Category(models.Model):
 
 class Company(models.Model):
     company_name = models.CharField(max_length=128)
-    photo = models.ImageField(blank=True, null=True, upload_to='company_photo/')
+    photo = models.ImageField(blank=True, null=True, upload_to=f'company_photo/{company_name}')
     description = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
