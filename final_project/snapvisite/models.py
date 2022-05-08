@@ -1,7 +1,8 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from account.models import Profile
-from datetime import datetime
+from datetime import datetime, time
+import uuid
 
 
 class Address(models.Model):
@@ -31,13 +32,18 @@ class Category(models.Model):
         return f'{self.category_name}'
 
 
+def save_photo(instance, filename):
+    filename = f'{uuid.uuid1()}_{filename}'
+    return f'company_photos/{instance.company_name}_{instance.id}/{filename}'
+
+
 class Company(models.Model):
     company_name = models.CharField(max_length=128)
-    photo = models.ImageField(blank=True, null=True, upload_to='company_photo/')
+    photo = models.ImageField(blank=True, null=True, upload_to=save_photo)
     description = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True, null=True)
     category = models.ManyToManyField(Category)
 
     class Meta:
@@ -60,10 +66,31 @@ class CompanyDay(models.Model):
         return f'({self.company} {self.date})'
 
 
+def get_time_choices():
+    """
+    generates hours from 6am to 11pm, every 30min.
+    returns a list of tuples to choices ( human readable name, actual value)
+    """
+    time_list = []
+    hours = 6
+    minutes = [0, 30]
+    for i in range(1, 37):
+        if i % 2 != 0:
+            time_list.append((f'{time}', time(hours, minutes[0])))
+        if i % 2 == 0:
+            time_list.append((f'{time}', time(hours, minutes[1])))
+        if i % 2 == 0:
+            hours += 1
+    return time_list
+
+
 class Schedule(models.Model):
-    day_of_week = models.CharField(max_length=20)
-    open_time = models.TimeField()
-    close_time = models.TimeField()
+    DAYS = (('mon', 'Monday'), ('tue', 'Tuesday'), ('wed', 'Wednesday'), ('thu', 'Thursday'),
+            ('tue', 'Tuesday'), ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday'))
+    TIME_LIST = get_time_choices()
+    day_of_week = models.CharField(max_length=20, choices=DAYS, default='mon')
+    open_time = models.TimeField(choices=TIME_LIST)
+    close_time = models.TimeField(choices=TIME_LIST)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:

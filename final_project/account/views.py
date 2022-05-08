@@ -25,3 +25,4 @@ class UpdateProfileView(UpdateView):
         pk = self.kwargs["pk"]
         return reverse("account:profile_detail", kwargs={"pk": pk})
 
+
