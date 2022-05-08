@@ -37,7 +37,7 @@ class Company(models.Model):
     description = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True, null=True)
     category = models.ManyToManyField(Category)
 
     class Meta:
