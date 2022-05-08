@@ -12,6 +12,12 @@ class RegistrationProfileForm(UserCreationForm):
 class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('user_name', 'first_name', 'last_name', 'phone_number')
+        fields = ('first_name', 'last_name', 'phone_number')
+
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'example:.. +48 123 456 789'}),
+        }
 
 
