@@ -13,7 +13,3 @@ class CreateCompanyFirstStepForm(forms.ModelForm):
         queryset=Category.objects.all(),
         widget=forms.CheckboxSelectMultiple
     )
-
-
-
-
