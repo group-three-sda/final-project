@@ -18,7 +18,7 @@
     <a href="{% url 'account:profile_detail' request.user.id %}"><button type="button" class="btn btn-outline-dark btn-lg">See yours details</button></a><br>
     <br>
     <!-- Create company from user or go into your company panel -->
-    <button type="button" class="btn btn-outline-dark btn-lg">Run your business</button><br>
+    <a href="{% url 'snapvisite:create_company_first_step' %}"><button type="button" class="btn btn-outline-dark btn-lg">Run your business</button></a><br>
     <br>
     <!-- Logout Section -->
     <a href="{% url 'logout' %}"><button type="button" class="btn btn-outline-dark btn-lg">Logout</button></a>
