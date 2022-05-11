@@ -86,7 +86,7 @@ def get_time_choices():
 
 class Schedule(models.Model):
     DAYS = (('mon', 'Monday'), ('tue', 'Tuesday'), ('wed', 'Wednesday'), ('thu', 'Thursday'),
-            ('tue', 'Tuesday'), ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday'))
+            ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday'))
     TIME_LIST = get_time_choices()
     day_of_week = models.CharField(max_length=20, choices=DAYS, default='mon')
     open_time = models.TimeField(choices=TIME_LIST)

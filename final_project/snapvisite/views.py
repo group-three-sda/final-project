@@ -1,12 +1,11 @@
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView, TemplateView, RedirectView
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from .models import Category, Company
 from .forms import CreateCompanyFirstStepForm
 
 
-class BaseView(ListView):
-    model = Category
+class BaseView(TemplateView):
     template_name = "snapvisite/base.html"
 
 
@@ -28,4 +27,21 @@ class CreateCompanyFirstStepView(CreateView):
         obj.save()
         obj = form.save_m2m()
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
+
+
+class CompanyPanelView(ListView):
+    model = Company
+    template_name = "snapvisite/company_panel.html"
+
+    def get_queryset(self):
+        user = self.request.user
+        return Company.objects.filter(owner=user)
+
+
+class YourCompanyView(DetailView):
+    model = Company
+    template_name = "snapvisite/your_company.html"
+
+
+
 
