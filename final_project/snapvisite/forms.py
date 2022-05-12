@@ -1,5 +1,5 @@
 from django import forms
-from .models import Company, Category
+from .models import Company, Category, Address
 from account.models import Profile
 
 
@@ -13,6 +13,18 @@ class CreateCompanyFirstStepForm(forms.ModelForm):
         queryset=Category.objects.all(),
         widget=forms.CheckboxSelectMultiple
     )
+
+
+class CreateAddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        exclude = ('company',)
+
+        city = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+        postal_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+        street_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+        street_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+        apartment_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
 
 
 class UpdateCompanyNameForm(forms.ModelForm):

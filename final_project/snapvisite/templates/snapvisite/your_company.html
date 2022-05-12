@@ -24,6 +24,16 @@
             <p style="font-size: 24px"> {{ object.description }} </p>
         </div>
         <div class="col-4" style="height: 300px;">
+            <p class="shadow-sm bg-light" style="font-size: 32px;"> Address </p>
+            {% if object.address.apartment_number %}
+            <p style="font-size: 24px">{{ object.address.street_name }} {{ object.address.street_number }} / {{ object.address.apartment_number }}</p>
+            {% else %}
+            <p style="font-size: 24px">{{ object.address.street_name }} {{ object.address.street_number }}</p>
+            {% endif %}
+            <p style="font-size: 24px">{{ object.address.city }}, {{ object.address.postal_code }}</p>
+
+            
+
         </div>
     </div>
 </div>

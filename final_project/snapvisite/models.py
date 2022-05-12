@@ -5,21 +5,6 @@ from datetime import datetime, time
 import uuid
 
 
-class Address(models.Model):
-    city = models.CharField(max_length=50)
-    postal_code = models.CharField(max_length=6)
-    street_name = models.CharField(max_length=50)
-    street_number = models.CharField(max_length=50)
-    apartment_number = models.CharField(max_length=5, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'address'
-        verbose_name_plural = 'addresses'
-
-    def __str__(self):
-        return f'({self.city} {self.street_name} {self.street_number})'
-
-
 class Category(models.Model):
     category_name = models.CharField(max_length=40)
     photo = models.ImageField(blank=True, null=True, upload_to='category_image')
@@ -43,7 +28,6 @@ class Company(models.Model):
     description = models.TextField(blank=True, null=True, max_length=310)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True, null=True)
     category = models.ManyToManyField(Category)
 
     class Meta:
@@ -52,6 +36,22 @@ class Company(models.Model):
 
     def __str__(self):
         return f'{self.company_name}'
+
+
+class Address(models.Model):
+    city = models.CharField(max_length=50)
+    postal_code = models.CharField(max_length=6)
+    street_name = models.CharField(max_length=50)
+    street_number = models.CharField(max_length=50)
+    apartment_number = models.CharField(max_length=5, blank=True, null=True)
+    company = models.OneToOneField(Company, on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'address'
+        verbose_name_plural = 'addresses'
+
+    def __str__(self):
+        return f'({self.city} {self.street_name} {self.street_number})'
 
 
 class CompanyDay(models.Model):

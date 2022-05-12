@@ -1,6 +1,7 @@
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, RedirectView, UpdateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.shortcuts import get_object_or_404
 from .models import Category, Company
 from .forms import *
 
@@ -71,6 +72,21 @@ class EditCompanyDescriptionView(UpdateView):
     def get_success_url(self):
         pk = self.kwargs["pk"]
         return reverse("snapvisite:your_company", kwargs={"pk": pk})
+
+
+class CreateAddressView(CreateView):
+    model = Address
+    form_class = CreateAddressForm
+    template_name = 'snapvisite/address.html'
+
+    def form_valid(self, form, *args, **kwargs):
+        form.instance.company_id = self.kwargs['company_id']
+        obj = form.save(commit=False)
+        obj.save()
+        return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": form.instance.company_id}))
+
+
+
 
 
 
