@@ -39,7 +39,7 @@ def save_photo(instance, filename):
 
 class Company(models.Model):
     company_name = models.CharField(max_length=128)
-    photo = models.ImageField(upload_to=save_photo, default='static/snapvisite/images/default_company_photo.png')
+    photo = models.ImageField(blank=True, null=True, upload_to=save_photo)
     description = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
