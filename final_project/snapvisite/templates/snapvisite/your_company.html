@@ -1,4 +1,5 @@
 {% extends 'snapvisite/base.html' %}
+{% load static %}
 
 
 {% block content %}
@@ -6,8 +7,12 @@
 <div class="container ms-auto mx-auto bg-light text-center"
      style="border: solid 1px lightgray; font-family: 'Lato Light', serif; padding-bottom: 50px; margin-top: 5px;">
     <div class="row">
-        <div class="col-4" style="height: 300px;">
+        <div class="col-4" style="height: 400px;">
+            {% if object.photo %}
             <img src="{{ object.photo.url }}" style="height: 98%; width: 98%; padding-top: 8px;">
+            {% else %}
+            <img src="{% static 'snapvisite/images/default_company_photo.png' %}" style="height: 98%; width: 98%; padding-top: 20px;">
+            {% endif %}
         </div>
         <div class="col-8" style="height: 300px;">
             <p style="font-size: 48px;"> {{ object.company_name }} </p>
