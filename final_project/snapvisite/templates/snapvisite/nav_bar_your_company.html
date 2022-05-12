@@ -14,10 +14,10 @@
           <a class="nav-link" href="{% url 'snapvisite:company_name_edit' object.id %}">Company name</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" href="{% url 'snapvisite:company_desc_edit' object.id %}">Description</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" href="{% url 'snapvisite:company_photo_edit' object.id %}">Photo</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Dropdown</a>

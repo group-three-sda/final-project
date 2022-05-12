@@ -3,19 +3,27 @@
 
 
 {% block content %}
+<!-- Editor company bar -->
 {% include "snapvisite/nav_bar_your_company.html" %}
+<!-- Company container -->
 <div class="container ms-auto mx-auto bg-light text-center"
      style="border: solid 1px lightgray; font-family: 'Lato Light', serif; padding-bottom: 50px; margin-top: 5px;">
+
+     <!-- IMAGE PART -->
     <div class="row">
         <div class="col-4" style="height: 400px;">
             {% if object.photo %}
-            <img src="{{ object.photo.url }}" style="height: 98%; width: 98%; padding-top: 8px;">
+            <img class="shadow-sm bg-light" src="{{ object.photo.url }}" style="height: 98%; width: 98%; padding-top: 20px;">
             {% else %}
-            <img src="{% static 'snapvisite/images/default_company_photo.png' %}" style="height: 98%; width: 98%; padding-top: 20px;">
+            <img class="shadow-sm bg-light" src="{% static 'snapvisite/images/default_company_photo.png' %}" style="height: 98%; width: 98%; padding-top: 20px;">
             {% endif %}
         </div>
-        <div class="col-8" style="height: 300px;">
-            <p style="font-size: 48px;"> {{ object.company_name }} </p>
+
+        <div class="col-4" style="height: 300px;">
+            <p class="shadow-sm bg-light" style="font-size: 40px;"> {{ object.company_name }} </p>
+            <p style="font-size: 24px"> {{ object.description }} </p>
+        </div>
+        <div class="col-4" style="height: 300px;">
         </div>
     </div>
 </div>

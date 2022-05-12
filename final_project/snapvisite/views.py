@@ -2,7 +2,7 @@ from django.views.generic import ListView, CreateView, DetailView, TemplateView,
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from .models import Category, Company
-from .forms import CreateCompanyFirstStepForm, UpdateCompanyNameForm
+from .forms import *
 
 
 class BaseView(TemplateView):
@@ -46,6 +46,26 @@ class YourCompanyView(DetailView):
 class EditCompanyNameView(UpdateView):
     model = Company
     form_class = UpdateCompanyNameForm
+    template_name = "snapvisite/company_editor.html"
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("snapvisite:your_company", kwargs={"pk": pk})
+
+
+class EditCompanyPhotoView(UpdateView):
+    model = Company
+    form_class = UpdateCompanyPhotoForm
+    template_name = "snapvisite/company_editor.html"
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("snapvisite:your_company", kwargs={"pk": pk})
+
+
+class EditCompanyDescriptionView(UpdateView):
+    model = Company
+    form_class = UpdateCompanyDescriptionForm
     template_name = "snapvisite/company_editor.html"
 
     def get_success_url(self):

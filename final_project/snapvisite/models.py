@@ -38,9 +38,9 @@ def save_photo(instance, filename):
 
 
 class Company(models.Model):
-    company_name = models.CharField(max_length=128)
+    company_name = models.CharField(max_length=17)
     photo = models.ImageField(blank=True, null=True, upload_to=save_photo)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, max_length=310)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
     address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True, null=True)
