@@ -2,18 +2,15 @@
 
 
 {% block content %}
-<div class="container ms-auto mx-auto bg-light text-center" style="border: solid 1px black; font-family: 'Lato Light', serif; padding-bottom: 50px;">
+{% include "snapvisite/nav_bar_your_company.html" %}
+<div class="container ms-auto mx-auto bg-light text-center"
+     style="border: solid 1px lightgray; font-family: 'Lato Light', serif; padding-bottom: 50px; margin-top: 5px;">
     <div class="row">
-        <div class="col-12 border-bottom border-end">
-            <h3 class="display-4 text-center">{{ object.company_name }}</h3>
+        <div class="col-4" style="height: 300px;">
+            <img src="{{ object.photo.url }}" style="height: 98%; width: 98%; padding-top: 8px;">
         </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            
-        </div>
-        <div class="col-6">
-            
+        <div class="col-8" style="height: 300px;">
+            <p style="font-size: 48px;"> {{ object.company_name }} </p>
         </div>
     </div>
 </div>

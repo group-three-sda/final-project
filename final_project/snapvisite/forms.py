@@ -13,3 +13,11 @@ class CreateCompanyFirstStepForm(forms.ModelForm):
         queryset=Category.objects.all(),
         widget=forms.CheckboxSelectMultiple
     )
+
+
+class UpdateCompanyNameForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ('company_name',)
+
+    company_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
