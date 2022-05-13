@@ -76,7 +76,7 @@ class EditCompanyDescriptionView(UpdateView):
 
 class CreateAddressView(CreateView):
     model = Address
-    form_class = CreateAddressForm
+    form_class = AddressForm
     template_name = 'snapvisite/address.html'
 
     def form_valid(self, form, *args, **kwargs):
@@ -85,6 +85,15 @@ class CreateAddressView(CreateView):
         obj.save()
         return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": form.instance.company_id}))
 
+
+class UpdateAddressView(UpdateView):
+    model = Address
+    form_class = AddressForm
+    template_name = 'snapvisite/address.html'
+
+    def get_success_url(self):
+        company_id = self.kwargs['company_id']
+        return reverse('snapvisite:your_company', kwargs={"pk": company_id})
 
 
 

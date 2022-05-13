@@ -19,11 +19,17 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'snapvisite:company_photo_edit' object.id %}">Photo</a>
         </li>
+        {% if object.address %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'snapvisite:company_update_address' object.address.id object.id %}">Address</a>
+        </li>
+        {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'snapvisite:company_address_add' object.id %}">Address</a>
         </li>
+        {% endif %}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Add</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Schedule</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Link</a></li>
             <li><a class="dropdown-item" href="#">Another link</a></li>
