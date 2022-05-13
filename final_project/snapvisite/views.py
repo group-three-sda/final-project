@@ -1,8 +1,8 @@
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, RedirectView, UpdateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404
-from .models import Category, Company
+from django.shortcuts import get_object_or_404, render, redirect
+from .models import *
 from .forms import *
 
 
@@ -42,6 +42,14 @@ class CompanyPanelView(ListView):
 class YourCompanyView(DetailView):
     model = Company
     template_name = "snapvisite/your_company.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(YourCompanyView, self).get_context_data(**kwargs)
+        id_company = self.kwargs["pk"]
+        context["schedule_list"] = Schedule.objects.filter(company__id=id_company)
+        return context
+
+
 
 
 class EditCompanyNameView(UpdateView):
@@ -89,14 +97,20 @@ class CreateAddressView(CreateView):
 class UpdateAddressView(UpdateView):
     model = Address
     form_class = AddressForm
-    template_name = 'snapvisite/address.html'
+    template_name = 'snapvisite/company_editor.html'
 
     def get_success_url(self):
         company_id = self.kwargs['company_id']
         return reverse('snapvisite:your_company', kwargs={"pk": company_id})
 
 
+def schedule_view(request, company_id):
+    company = Company.objects.get(pk=company_id)
 
-
-
-
+    if request.method == 'POST':
+        formset = ScheduleInlineFormset(request.POST, instance=company)
+        if formset.is_valid():
+            formset.save()
+            return redirect('snapvisite:your_company', pk=company.id)
+    formset = ScheduleInlineFormset(instance=company)
+    return render(request, 'snapvisite/schedule.html', {'formset': formset})

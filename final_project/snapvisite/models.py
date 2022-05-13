@@ -76,21 +76,23 @@ def get_time_choices():
     minutes = [0, 30]
     for i in range(1, 37):
         if i % 2 != 0:
-            time_list.append((f'{time}', time(hours, minutes[0])))
+            x = str(time(hours, minutes[0]))[:5]
+            time_list.append((x, x))
         if i % 2 == 0:
-            time_list.append((f'{time}', time(hours, minutes[1])))
+            x = str(time(hours, minutes[1]))[:5]
+            time_list.append((x, x))
         if i % 2 == 0:
             hours += 1
     return time_list
 
 
 class Schedule(models.Model):
-    DAYS = (('mon', 'Monday'), ('tue', 'Tuesday'), ('wed', 'Wednesday'), ('thu', 'Thursday'),
-            ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday'))
+    DAYS = (('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
+            ('Friday', 'Friday'), ('Saturday', 'Saturday'), ('Sunday', 'Sunday'))
     TIME_LIST = get_time_choices()
-    day_of_week = models.CharField(max_length=20, choices=DAYS, default='mon')
-    open_time = models.TimeField(choices=TIME_LIST)
-    close_time = models.TimeField(choices=TIME_LIST)
+    day_of_week = models.CharField(max_length=50, choices=DAYS, null=True, blank=True)
+    open_time = models.CharField(max_length=50, choices=TIME_LIST, null=True, blank=True)
+    close_time = models.CharField(max_length=50, choices=TIME_LIST, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Company, Category, Address
+from django.forms import inlineformset_factory
+from .models import Company, Category, Address, Schedule
 from account.models import Profile
 
 
@@ -20,11 +21,12 @@ class AddressForm(forms.ModelForm):
         model = Address
         exclude = ('company',)
 
-        city = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
-        postal_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
-        street_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
-        street_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
-        apartment_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+    city = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+    postal_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+    street_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+    street_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+    apartment_number = forms.CharField(required=False,
+                                       widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
 
 
 class UpdateCompanyNameForm(forms.ModelForm):
@@ -51,3 +53,19 @@ class UpdateCompanyPhotoForm(forms.ModelForm):
     widgets = {
         'photo': forms.FileInput(attrs={'class': 'form-control form-control-lg'})
     }
+
+
+class ScheduleDayForm(forms.ModelForm):
+    class Meta:
+        model = Schedule
+        fields = ('day_of_week', 'open_time', 'close_time')
+
+
+ScheduleInlineFormset = inlineformset_factory(
+    Company,
+    Schedule,
+    form=ScheduleDayForm,
+    extra=3,
+    max_num=7,
+    can_delete=True,
+)
