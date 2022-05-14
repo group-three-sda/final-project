@@ -10,7 +10,7 @@
     <!-- LOGGED USER -->
     {% if request.user.is_authenticated %}
 
-    <p style="font-size: 22px">Welcome, <strong>{{ request.user }}</strong></p>
+    <p style="font-size: 22px">Welcome, <strong>{{ request.user.user_name }}</strong></p>
     <!-- Future visits View -->
     <button type="button" class="btn btn-outline-dark btn-lg">Check yours visits</button>
     <br><br>
