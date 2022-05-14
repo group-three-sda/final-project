@@ -27,7 +27,7 @@ class CreateCompanyFirstStepView(CreateView):
         obj.owner = self.request.user
         obj.save()
         obj = form.save_m2m()
-        return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
+        return HttpResponseRedirect(reverse_lazy('snapvisite:company_panel'))
 
 
 class CompanyPanelView(ListView):
