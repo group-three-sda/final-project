@@ -65,7 +65,7 @@ ScheduleInlineFormset = inlineformset_factory(
     Company,
     Schedule,
     form=ScheduleDayForm,
-    extra=3,
+    extra=7,
     max_num=7,
     can_delete=True,
 )
