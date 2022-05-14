@@ -1,4 +1,7 @@
 {% load static %}
+{% load custom_tags %}
+{% all_categories as categories %}
+
 {% include "snapvisite/account_offcanvas.html" %}
 <nav class="row navbar navbar-expand-sm bg-light fixed-top shadow-sm p-4 mb-4" style="font-family: 'Lato', serif;">
 <!-- CONTAINER WITH LOGO PART -->
@@ -17,7 +20,7 @@
 <!-- CATEGORIES PART -->
         <select class="form-select " aria-label="form-select" style="border: solid 1px black; border-radius: 10px 0 0 10px; max-width: 200px; transition-duration: 99999999999s">
             <option selected>CATEGORIES</option>
-            {% for category in object_list %}
+            {% for category in categories %}
             <option>{{ category.category_name }}</option>
             {% endfor %}
         </select>

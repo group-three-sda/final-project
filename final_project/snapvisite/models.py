@@ -5,21 +5,6 @@ from datetime import datetime, time
 import uuid
 
 
-class Address(models.Model):
-    city = models.CharField(max_length=50)
-    postal_code = models.CharField(max_length=6)
-    street_name = models.CharField(max_length=50)
-    street_number = models.CharField(max_length=50)
-    apartment_number = models.CharField(max_length=5, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'address'
-        verbose_name_plural = 'addresses'
-
-    def __str__(self):
-        return f'({self.city} {self.street_name} {self.street_number})'
-
-
 class Category(models.Model):
     category_name = models.CharField(max_length=40)
     photo = models.ImageField(blank=True, null=True, upload_to='category_image')
@@ -38,12 +23,11 @@ def save_photo(instance, filename):
 
 
 class Company(models.Model):
-    company_name = models.CharField(max_length=128)
+    company_name = models.CharField(max_length=17)
     photo = models.ImageField(blank=True, null=True, upload_to=save_photo)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, max_length=310)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True, null=True)
     category = models.ManyToManyField(Category)
 
     class Meta:
@@ -52,6 +36,22 @@ class Company(models.Model):
 
     def __str__(self):
         return f'{self.company_name}'
+
+
+class Address(models.Model):
+    city = models.CharField(max_length=50)
+    postal_code = models.CharField(max_length=6)
+    street_name = models.CharField(max_length=50)
+    street_number = models.CharField(max_length=50)
+    apartment_number = models.CharField(max_length=5, blank=True, null=True)
+    company = models.OneToOneField(Company, on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'address'
+        verbose_name_plural = 'addresses'
+
+    def __str__(self):
+        return f'({self.city} {self.street_name} {self.street_number})'
 
 
 class CompanyDay(models.Model):
@@ -76,21 +76,23 @@ def get_time_choices():
     minutes = [0, 30]
     for i in range(1, 37):
         if i % 2 != 0:
-            time_list.append((f'{time}', time(hours, minutes[0])))
+            x = str(time(hours, minutes[0]))[:5]
+            time_list.append((x, x))
         if i % 2 == 0:
-            time_list.append((f'{time}', time(hours, minutes[1])))
+            x = str(time(hours, minutes[1]))[:5]
+            time_list.append((x, x))
         if i % 2 == 0:
             hours += 1
     return time_list
 
 
 class Schedule(models.Model):
-    DAYS = (('mon', 'Monday'), ('tue', 'Tuesday'), ('wed', 'Wednesday'), ('thu', 'Thursday'),
-            ('tue', 'Tuesday'), ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday'))
+    DAYS = (('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
+            ('Friday', 'Friday'), ('Saturday', 'Saturday'), ('Sunday', 'Sunday'))
     TIME_LIST = get_time_choices()
-    day_of_week = models.CharField(max_length=20, choices=DAYS, default='mon')
-    open_time = models.TimeField(choices=TIME_LIST)
-    close_time = models.TimeField(choices=TIME_LIST)
+    day_of_week = models.CharField(max_length=50, choices=DAYS, null=True, blank=True)
+    open_time = models.CharField(max_length=50, choices=TIME_LIST, null=True, blank=True)
+    close_time = models.CharField(max_length=50, choices=TIME_LIST, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
