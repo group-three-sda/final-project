@@ -1,8 +1,29 @@
 {% extends 'snapvisite/base.html' %}
+{% load static %}
 
 {% block content %}
+
 {% for company in object_list %}
-<a href="{% url 'snapvisite:your_company' company.pk %}"> {{ company.company_name }}</a>
+<div class="container">
+<div class="row-cols-5">
+<div class="col">
+    <div class="card w-100" style="text-align: center; margin-top: 10px;">
+        {% if company.photo %}
+        <a href="{% url 'snapvisite:your_company' company.pk %}"><img src="{{ company.photo.url }}" class="card-img-top mx-auto" style="width: 90%; height:200px; margin-top: 10px;"></a>
+        {% else %}
+        <a href="{% url 'snapvisite:your_company' company.pk %}"><img src="{% static 'snapvisite/images/default_company_photo.png' %}" class="card-img-top mx-auto" style="width: 90%; height:200px; margin-top: 10px;"></a>
+        {% endif %}
+        <div class="card-body">
+            {{ company.company_name }}
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'snapvisite:your_company' company.pk %}"><button type="button" class="btn btn-light btn-outline-dark btn-lg">Go</button></a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 {% endfor %}
+
 
 {% endblock content %}
