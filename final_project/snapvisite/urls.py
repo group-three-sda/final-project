@@ -16,5 +16,5 @@ urlpatterns = [
     path('snapvisite/create-address-company/<int:company_id>/', CreateAddressView.as_view(), name='company_address_add'),
     path('snapvisite/update-address-company/<int:pk>/<int:company_id>/', UpdateAddressView.as_view(),
          name='company_update_address'),
-    path('snapvisite/schedule-company/<int:company_id>/', schedule_view, name='schedule_company')
+    path('snapvisite/schedule-company/<int:company_id>/', ScheduleView.as_view(), name='schedule_company')
 ]

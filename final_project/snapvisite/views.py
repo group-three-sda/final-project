@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, DetailView, TemplateView, RedirectView, UpdateView
+from django.views.generic import ListView, CreateView, DetailView, TemplateView, RedirectView, UpdateView, View
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, render, redirect
@@ -44,15 +44,17 @@ class YourCompanyView(DetailView):
     template_name = "snapvisite/your_company.html"
 
     def get_context_data(self, **kwargs):
+        """
+        Send a schedule list to view
+        """
         context = super(YourCompanyView, self).get_context_data(**kwargs)
         id_company = self.kwargs["pk"]
         context["schedule_list"] = Schedule.objects.filter(company__id=id_company)
         return context
 
 
-
-
 class EditCompanyNameView(UpdateView):
+    """ EDITOR """
     model = Company
     form_class = UpdateCompanyNameForm
     template_name = "snapvisite/company_editor.html"
@@ -63,6 +65,7 @@ class EditCompanyNameView(UpdateView):
 
 
 class EditCompanyPhotoView(UpdateView):
+    """ EDITOR """
     model = Company
     form_class = UpdateCompanyPhotoForm
     template_name = "snapvisite/company_editor.html"
@@ -73,6 +76,7 @@ class EditCompanyPhotoView(UpdateView):
 
 
 class EditCompanyDescriptionView(UpdateView):
+    """ EDITOR """
     model = Company
     form_class = UpdateCompanyDescriptionForm
     template_name = "snapvisite/company_editor.html"
@@ -83,6 +87,7 @@ class EditCompanyDescriptionView(UpdateView):
 
 
 class CreateAddressView(CreateView):
+    """ EDITOR """
     model = Address
     form_class = AddressForm
     template_name = 'snapvisite/address.html'
@@ -95,6 +100,7 @@ class CreateAddressView(CreateView):
 
 
 class UpdateAddressView(UpdateView):
+    """ EDITOR """
     model = Address
     form_class = AddressForm
     template_name = 'snapvisite/company_editor.html'
@@ -104,13 +110,24 @@ class UpdateAddressView(UpdateView):
         return reverse('snapvisite:your_company', kwargs={"pk": company_id})
 
 
-def schedule_view(request, company_id):
-    company = Company.objects.get(pk=company_id)
+class ScheduleView(View):
 
-    if request.method == 'POST':
+    def get(self, request, company_id):
+        company = Company.objects.get(pk=company_id)
+        formset = ScheduleInlineFormset(instance=company)
+        return render(request, 'snapvisite/schedule.html', {'formset': formset})
+
+    def post(self, request, company_id, **kwargs):
+        company = Company.objects.get(pk=company_id)
         formset = ScheduleInlineFormset(request.POST, instance=company)
         if formset.is_valid():
             formset.save()
             return redirect('snapvisite:your_company', pk=company.id)
-    formset = ScheduleInlineFormset(instance=company)
-    return render(request, 'snapvisite/schedule.html', {'formset': formset})
+
+
+
+
+
+
+
+
