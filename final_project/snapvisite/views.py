@@ -1,5 +1,5 @@
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, RedirectView, UpdateView, View
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import *
@@ -119,9 +119,11 @@ class ScheduleView(View):
     def post(self, request, company_id, **kwargs):
         company = Company.objects.get(pk=company_id)
         formset = ScheduleInlineFormset(request.POST, instance=company)
+        x = formset.is_valid()
         if formset.is_valid():
             formset.save()
             return redirect('snapvisite:your_company', pk=company.id)
+
 
 
 

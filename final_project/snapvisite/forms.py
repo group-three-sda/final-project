@@ -55,11 +55,16 @@ class UpdateCompanyPhotoForm(forms.ModelForm):
     }
 
 
+time_widget = forms.TimeInput(attrs={'class': 'timepicker'})
+
 
 class ScheduleDayForm(forms.ModelForm):
     class Meta:
         model = Schedule
         fields = ('day_of_week', 'open_time', 'close_time')
+
+    open_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
+    close_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
 
 
 ScheduleInlineFormset = inlineformset_factory(

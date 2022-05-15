@@ -19,4 +19,22 @@
         </div>
     </div>
 </div>
+<script>
+$( document ).ready(function() {
+    $(function(){
+        $('.timepicker').timepicker({
+            timeFormat: 'HH:mm ',
+            interval: 30,
+            minTime: '6am',
+            maxTime: '23:30pm',
+            startTime: '6:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+    });
+});
+
+
+</script>
 {% endblock %}
