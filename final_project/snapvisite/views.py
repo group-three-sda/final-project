@@ -111,7 +111,6 @@ class UpdateAddressView(UpdateView):
 
 
 class ScheduleView(View):
-
     def get(self, request, company_id):
         company = Company.objects.get(pk=company_id)
         formset = ScheduleInlineFormset(instance=company)

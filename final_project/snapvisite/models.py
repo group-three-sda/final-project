@@ -66,39 +66,12 @@ class CompanyDay(models.Model):
         return f'({self.company} {self.date})'
 
 
-def get_time_choices():
-    """
-    generates hours from 6am to 11pm, every 30min.
-    returns a list of tuples to choices ( human readable name, actual value)
-
-    variable:
-    str_time without [:5] 06:00:00, 6:30:00
-    str_time with [:5] 06:00, 6:30 - correct
-    """
-    time_list = []
-    hours = 6
-    minutes = [0, 30]
-    begin_cycle = 1
-    last_cycle = 37
-    for cycle in range(begin_cycle, last_cycle):
-        if cycle % 2 != 0:
-            str_time = str(time(hours, minutes[0]))[:5]
-            time_list.append((str_time, str_time))
-        if cycle % 2 == 0:
-            str_time = str(time(hours, minutes[1]))[:5]
-            time_list.append((str_time, str_time))
-        if cycle % 2 == 0:
-            hours += 1
-    return time_list
-
-
 class Schedule(models.Model):
     DAYS = (('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
             ('Friday', 'Friday'), ('Saturday', 'Saturday'), ('Sunday', 'Sunday'))
-    TIME_LIST = get_time_choices()
     day_of_week = models.CharField(max_length=50, choices=DAYS, null=True, blank=True)
-    open_time = models.CharField(max_length=50, choices=TIME_LIST, null=True, blank=True)
-    close_time = models.CharField(max_length=50, choices=TIME_LIST, null=True, blank=True)
+    open_time = models.TimeField(null=True, blank=True)
+    close_time = models.TimeField(null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:

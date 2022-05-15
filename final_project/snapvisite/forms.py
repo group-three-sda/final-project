@@ -55,6 +55,7 @@ class UpdateCompanyPhotoForm(forms.ModelForm):
     }
 
 
+
 class ScheduleDayForm(forms.ModelForm):
     class Meta:
         model = Schedule
