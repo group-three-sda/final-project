@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
 from .models import Company, Category, Address, Schedule, Service
 from account.models import Profile
@@ -38,6 +39,12 @@ class AddressForm(forms.ModelForm):
     street_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
     apartment_number = forms.CharField(required=False,
                                        widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        city = cleaned_data.get("city")
+        if not city[0].isupper():
+            raise ValidationError({"city": "First letter of city had to be uppercase."})
 
 
 class UpdateCompanyNameForm(forms.ModelForm):

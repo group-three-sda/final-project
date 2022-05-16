@@ -118,7 +118,7 @@ class UpdateAddressView(UpdateView):
     """ EDITOR """
     model = Address
     form_class = AddressForm
-    template_name = 'snapvisite/company_editor.html'
+    template_name = 'snapvisite/address.html'
 
     def get_success_url(self):
         company_id = self.kwargs['company_id']
