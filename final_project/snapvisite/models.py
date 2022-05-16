@@ -85,7 +85,7 @@ class Schedule(models.Model):
 class Service(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField()
-    time = models.TimeField()
+    time = models.IntegerField(default=30, help_text="Put time in minutes. Like '60' = 1h, '30' = 30min, '90' = 1h 30min")
     price = models.DecimalField(max_digits=6, decimal_places=2)
     company = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
 

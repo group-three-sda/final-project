@@ -45,11 +45,12 @@ class YourCompanyView(DetailView):
 
     def get_context_data(self, **kwargs):
         """
-        Send a schedule list to view
+        Send a schedule and service list to view
         """
         context = super(YourCompanyView, self).get_context_data(**kwargs)
         id_company = self.kwargs["pk"]
         context["schedule_list"] = Schedule.objects.filter(company__id=id_company)
+        context["services_list"] = Service.objects.filter(company__id=id_company)
         return context
 
 
@@ -124,7 +125,26 @@ class ScheduleView(View):
             return redirect('snapvisite:your_company', pk=company.id)
 
 
+class CreateServiceView(CreateView):
+    model = Service
+    form_class = ServiceForm
+    template_name = 'snapvisite/company_editor.html'
 
+    def form_valid(self, form, *args, **kwargs):
+        form.instance.company_id = self.kwargs['company_id']
+        obj = form.save(commit=False)
+        obj.save()
+        return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": form.instance.company_id}))
+
+
+class UpdateServiceView(UpdateView):
+    model = Service
+    form_class = ServiceForm
+    template_name = 'snapvisite/company_editor.html'
+
+    def get_success_url(self):
+        company_id = self.kwargs['company_id']
+        return reverse('snapvisite:your_company', kwargs={"pk": company_id})
 
 
 

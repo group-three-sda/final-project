@@ -31,13 +31,8 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'snapvisite:schedule_company' object.id %}">Schedule</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Services</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">1</a></li>
-            <li><a class="dropdown-item" href="#">2</a></li>
-            <li><a class="dropdown-item" href="#">3</a></li>
-          </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'snapvisite:add_service' object.id %}"> Add Service</a>
         </li>
       </ul>
     </div>
