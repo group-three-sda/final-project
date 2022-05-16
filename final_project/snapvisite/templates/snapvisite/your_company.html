@@ -1,5 +1,6 @@
 {% extends 'snapvisite/base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 
 {% block content %}
@@ -7,7 +8,7 @@
 {% include "snapvisite/nav_bar_your_company.html" %}
 <!-- Company container -->
 <div class="container ms-auto mx-auto bg-light text-center"
-     style="border: solid 1px lightgray; font-family: 'Lato Light', serif; padding-bottom: 50px; margin-top: 5px;">
+     style="border: solid 1px lightgray; font-family: 'Lato Light', serif; margin-top: 5px;">
 
      <!-- IMAGE PART -->
     <div class="row">
@@ -19,11 +20,11 @@
             {% endif %}
         </div>
 
-        <div class="col-4" style="height: 300px;">
+        <div class="col-4" style="height: 400px;">
             <p class="shadow-sm bg-light" style="font-size: 40px;"> {{ object.company_name }} </p>
             <p style="font-size: 24px"> {{ object.description|default:'Place for your company description...' }} </p>
         </div>
-        <div class="col-4" style="height: 300px;">
+        <div class="col-4" style="min-height: 400px;">
             <p class="shadow-sm bg-light" style="font-size: 32px;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-signpost-2" viewBox="0 0 16 16">
             <path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z"/>
             </svg> Address </p>
@@ -38,8 +39,35 @@
             <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
             </svg> Open hours: </p>
             {% for schedule in schedule_list %}
-            <p> {{ schedule.day_of_week }} {{ schedule.open_time}}-{{ schedule.close_time }} </p>
+            <p> {{ schedule.day_of_week }} {{ schedule.open_time|time:"H:i"}}-{{ schedule.close_time|time:"H:i" }} </p>
             {% endfor %}
+
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-12 shadow-sm bg-light" style="padding-left: 30px;">
+            <p class="float-start" style="font-size: 40px;"> Services <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
+            <path d="M3 2v4.586l7 7L14.586 9l-7-7H3zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2z"/>
+            <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"/>
+            </svg></p>
+        </div>
+    </div>
+    <br>
+    {% for service in services_list %}
+    <div class="row shadow-sm bg-light" style="padding-left: 30px; max-height: 100px;">
+        <div class="col-3"><p class="float-start" style="font-size:32px;">{{ service.name }}</p></div>
+        <div class="col-3"><p class="float-start" style="font-size:18px;">{{ service.description }}</p></div>
+        <div class="col-2"><p class="float-start" style="font-size:28px;">{{ service.price }}.- </p></div>
+        <div class="col-2"><p class="float-start" style="font-size:28px;">{{ service.time|duration_format }}</p></div>
+        <div class="col-2"><a href="{% url 'snapvisite:service_edit' service.id service.company.id %}"><button type="button" class="btn btn-outline-dark btn-lg">
+        Edit</button></a></div>
+    </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-12 text-center">
+            <p style="font-size:18px; padding-top: 10px;">Catergories: <br>
+            {% for category in object.category.all %} {{category.category_name}}, {% endfor %}</p>
         </div>
     </div>
 </div>

@@ -9,3 +9,14 @@ def all_categories():
     return Category.objects.all()
 
 
+@register.filter('duration_format')
+def duration_format(value):
+    hours = int(value/60)
+    minutes = value % 60
+
+    if hours == 0:
+        return f'{minutes}min'
+    else:
+        return f'{hours}hours{minutes}minutes'
+
+
