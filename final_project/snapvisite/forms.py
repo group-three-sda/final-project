@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import *
+from .models import Company, Category, Address, Schedule, Service
 from account.models import Profile
 
 
