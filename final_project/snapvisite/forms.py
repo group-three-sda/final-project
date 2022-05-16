@@ -16,6 +16,17 @@ class CreateCompanyFirstStepForm(forms.ModelForm):
     )
 
 
+class EditCategoriesForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ('category',)
+
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
+
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
@@ -72,7 +83,7 @@ ScheduleInlineFormset = inlineformset_factory(
     form=ScheduleDayForm,
     extra=7,
     max_num=7,
-    can_delete=False,
+    can_delete=True,
 )
 
 

@@ -87,6 +87,20 @@ class EditCompanyDescriptionView(UpdateView):
         return reverse("snapvisite:your_company", kwargs={"pk": pk})
 
 
+class EditCompanyCategoriesView(UpdateView):
+    """ EDITOR """
+    model = Company
+    form_class = EditCategoriesForm
+    template_name = "snapvisite/company_editor.html"
+
+    def form_valid(self, form, *args, **kwargs):
+        form.save(commit=False)
+        form.save()
+        form.save_m2m()
+        id_company = self.kwargs["pk"]
+        return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": id_company}))
+
+
 class CreateAddressView(CreateView):
     """ EDITOR """
     model = Address
@@ -112,6 +126,7 @@ class UpdateAddressView(UpdateView):
 
 
 class ScheduleView(View):
+    """ EDITOR """
     def get(self, request, company_id):
         company = Company.objects.get(pk=company_id)
         formset = ScheduleInlineFormset(instance=company)
@@ -126,6 +141,7 @@ class ScheduleView(View):
 
 
 class CreateServiceView(CreateView):
+    """ EDITOR """
     model = Service
     form_class = ServiceForm
     template_name = 'snapvisite/company_editor.html'
@@ -138,6 +154,7 @@ class CreateServiceView(CreateView):
 
 
 class UpdateServiceView(UpdateView):
+    """ EDITOR """
     model = Service
     form_class = ServiceForm
     template_name = 'snapvisite/company_editor.html'
