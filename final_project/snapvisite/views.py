@@ -119,7 +119,6 @@ class ScheduleView(View):
     def post(self, request, company_id, **kwargs):
         company = Company.objects.get(pk=company_id)
         formset = ScheduleInlineFormset(request.POST, instance=company)
-        x = formset.is_valid()
         if formset.is_valid():
             formset.save()
             return redirect('snapvisite:your_company', pk=company.id)
