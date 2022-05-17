@@ -89,8 +89,8 @@ class Schedule(models.Model):
             ('tue', 'Tuesday'), ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday'))
     TIME_LIST = get_time_choices()
     day_of_week = models.CharField(max_length=20, choices=DAYS, default='mon')
-    open_time = models.TimeField(choices=TIME_LIST)
-    close_time = models.TimeField(choices=TIME_LIST)
+    open_time = models.TextField(choices=TIME_LIST)
+    close_time = models.TextField(choices=TIME_LIST)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
@@ -127,7 +127,7 @@ class TimeSlot(models.Model):
         verbose_name_plural = 'timeslots'
 
     def __str__(self):
-        return f'({self.company_day.company_name};\
+        return f'({self.company_day.company.company_name};\
          [Available: {self.status} Id: {self.pk}]; ({self.start_time} - {self.end_time}))'
 
 
@@ -136,7 +136,6 @@ class Appointment(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
     time_slot = models.ForeignKey(TimeSlot, on_delete=models.DO_NOTHING)
-    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
 
     class Meta:
         verbose_name = 'appointment'
