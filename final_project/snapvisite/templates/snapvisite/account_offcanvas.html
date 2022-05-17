@@ -10,7 +10,7 @@
     <!-- LOGGED USER -->
     {% if request.user.is_authenticated %}
 
-    <p style="font-size: 22px">Welcome, <strong>{{ request.user }}</strong></p>
+    <p style="font-size: 22px">Welcome, <strong>{{ request.user.user_name }}</strong></p>
     <!-- Future visits View -->
     <button type="button" class="btn btn-outline-dark btn-lg">Check yours visits</button>
     <br><br>
@@ -18,7 +18,13 @@
     <a href="{% url 'account:profile_detail' request.user.id %}"><button type="button" class="btn btn-outline-dark btn-lg">See yours details</button></a><br>
     <br>
     <!-- Create company from user or go into your company panel -->
-    <button type="button" class="btn btn-outline-dark btn-lg">Run your business</button><br>
+    {% if request.user.company_set.exists %}
+    <a href="{% url 'snapvisite:company_panel' %}"><button type="button" class="btn btn-outline-dark btn-lg">Company panel</button></a><br>
+    <br>
+    <a href="{% url 'snapvisite:create_company_first_step' %}"><button type="button" class="btn btn-outline-dark btn-lg">Run your business </button></a><br>
+    {% else %}
+    <a href="{% url 'snapvisite:create_company_first_step' %}"><button type="button" class="btn btn-outline-dark btn-lg">Run your business </button></a><br>
+    {% endif %}
     <br>
     <!-- Logout Section -->
     <a href="{% url 'logout' %}"><button type="button" class="btn btn-outline-dark btn-lg">Logout</button></a>

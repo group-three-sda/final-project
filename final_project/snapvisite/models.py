@@ -5,21 +5,6 @@ from datetime import datetime, time
 import uuid
 
 
-class Address(models.Model):
-    city = models.CharField(max_length=50)
-    postal_code = models.CharField(max_length=6)
-    street_name = models.CharField(max_length=50)
-    street_number = models.CharField(max_length=50)
-    apartment_number = models.CharField(max_length=5, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'address'
-        verbose_name_plural = 'addresses'
-
-    def __str__(self):
-        return f'({self.city} {self.street_name} {self.street_number})'
-
-
 class Category(models.Model):
     category_name = models.CharField(max_length=40)
     photo = models.ImageField(blank=True, null=True, upload_to='category_image')
@@ -38,12 +23,11 @@ def save_photo(instance, filename):
 
 
 class Company(models.Model):
-    company_name = models.CharField(max_length=128)
+    company_name = models.CharField(max_length=17)
     photo = models.ImageField(blank=True, null=True, upload_to=save_photo)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, max_length=310)
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True, null=True)
     category = models.ManyToManyField(Category)
 
     class Meta:
@@ -52,6 +36,22 @@ class Company(models.Model):
 
     def __str__(self):
         return f'{self.company_name}'
+
+
+class Address(models.Model):
+    city = models.CharField(max_length=50)
+    postal_code = models.CharField(max_length=6)
+    street_name = models.CharField(max_length=50)
+    street_number = models.CharField(max_length=50)
+    apartment_number = models.CharField(max_length=5, blank=True, null=True)
+    company = models.OneToOneField(Company, on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'address'
+        verbose_name_plural = 'addresses'
+
+    def __str__(self):
+        return f'({self.city} {self.street_name} {self.street_number})'
 
 
 class CompanyDay(models.Model):
@@ -66,31 +66,12 @@ class CompanyDay(models.Model):
         return f'({self.company} {self.date})'
 
 
-def get_time_choices():
-    """
-    generates hours from 6am to 11pm, every 30min.
-    returns a list of tuples to choices ( human readable name, actual value)
-    """
-    time_list = []
-    hours = 6
-    minutes = [0, 30]
-    for i in range(1, 37):
-        if i % 2 != 0:
-            time_list.append((f'{time}', time(hours, minutes[0])))
-        if i % 2 == 0:
-            time_list.append((f'{time}', time(hours, minutes[1])))
-        if i % 2 == 0:
-            hours += 1
-    return time_list
-
-
 class Schedule(models.Model):
-    DAYS = (('mon', 'Monday'), ('tue', 'Tuesday'), ('wed', 'Wednesday'), ('thu', 'Thursday'),
-            ('tue', 'Tuesday'), ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday'))
-    TIME_LIST = get_time_choices()
-    day_of_week = models.CharField(max_length=20, choices=DAYS, default='mon')
-    open_time = models.TextField(choices=TIME_LIST)
-    close_time = models.TextField(choices=TIME_LIST)
+    DAYS = (('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
+            ('Friday', 'Friday'), ('Saturday', 'Saturday'), ('Sunday', 'Sunday'))
+    day_of_week = models.CharField(max_length=50, choices=DAYS, null=True, blank=True)
+    open_time = models.TimeField(null=True, blank=True)
+    close_time = models.TimeField(null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
@@ -104,7 +85,7 @@ class Schedule(models.Model):
 class Service(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField()
-    time = models.TimeField()
+    time = models.IntegerField(default=30, help_text="Put time in minutes. Like '60' = 1h, '30' = 30min, '90' = 1h 30min")
     price = models.DecimalField(max_digits=6, decimal_places=2)
     company = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
 
@@ -127,7 +108,7 @@ class TimeSlot(models.Model):
         verbose_name_plural = 'timeslots'
 
     def __str__(self):
-        return f'({self.company_day.company.company_name};\
+        return f'({self.company_day.company_name};\
          [Available: {self.status} Id: {self.pk}]; ({self.start_time} - {self.end_time}))'
 
 

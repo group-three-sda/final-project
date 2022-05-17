@@ -1,4 +1,8 @@
 {% load static %}
+{% load custom_tags %}
+{% all_categories as categories %}
+
+
 {% include "snapvisite/account_offcanvas.html" %}
 <nav class="row navbar navbar-expand-sm bg-light fixed-top shadow-sm p-4 mb-4" style="font-family: 'Lato', serif;">
 <!-- CONTAINER WITH LOGO PART -->
@@ -15,21 +19,23 @@
 <!-- NAVBAR FIELD PART -->
         <div class="collapse navbar-collapse mt-auto" id="#mynavbar">
 <!-- CATEGORIES PART -->
-        <select class="form-select " aria-label="form-select" style="border: solid 1px black; border-radius: 10px 0 0 10px; max-width: 200px; transition-duration: 99999999999s">
-            <option selected>CATEGORIES</option>
-            {% for category in object_list %}
-            <option>{{ category.category_name }}</option>
+            <form class="d-flex col-sm-8" method="post" action="{% url 'snapvisite:company_search' %}">
+        <select class="form-select " aria-label="form-select" name="category" style="border: solid 1px black; border-radius: 10px 0 0 10px; max-width: 200px;">
+            <option value="0" selected>CATEGORIES</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.category_name }}</option>
             {% endfor %}
         </select>
 <!-- SEARCHING FIELD PART -->
-                <form class="d-flex col-sm-8">
                     <label style="border: solid 1px black;">
-                        <input class="form-control me-2" style="width: 400px; border: none; transition-duration: 999999999s; " type="search" placeholder="Search for your service:">
+                        <input class="form-control me-2" style="width: 400px; border: none;" type="search" placeholder="Enter the city you are looking for..."
+                        name="city">
                     </label>
 <!-- SEARCH BUTTON PART -->
-                    <button class="button" type="button" style="border: solid 1px black; border-radius: 0 10px 10px 0; width: 120px; background: white; color: black;">
+                    <button class="button" type="submit" style="border: solid 1px black; border-radius: 0 10px 10px 0; width: 120px; background: white; color: black;">
                         <strong>Search</strong>
                     </button>
+                    {% csrf_token %}
                 </form>
 <!-- ACCOUNT PART -->
         <div class="nav-item">
