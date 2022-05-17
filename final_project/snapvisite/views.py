@@ -164,12 +164,33 @@ class UpdateServiceView(UpdateView):
         return reverse('snapvisite:your_company', kwargs={"pk": company_id})
 
 
-class CompanyListView(ListView):
-    model = Company
-    template_name = "snapvisite/company_list.html"
+class CompanyListSearchView(View):
 
-    def get_queryset(self):
-        return Company.objects.all()
+    def post(self, request):
+        """
+        Select box with categories with value category_id
+        button CATEGORIES have value == 0 and it mean search in all categories.
+        """
+        all_categories_id = 0
+        if 'category' in request.POST:
+            category_id = int(request.POST['category'])
+        else:
+            category_id = all_categories_id
+
+        if category_id != all_categories_id:
+            if request.POST['city']:
+                searched_city = request.POST['city']
+                company_list = Company.objects.filter(category__id=category_id, address__city__icontains=searched_city)
+            else:
+                company_list = Company.objects.filter(category__id=category_id)
+            return render(request, 'snapvisite/company_list.html', {'company_list': company_list})
+        else:
+            if request.POST['city']:
+                searched_city = request.POST['city']
+                company_list = Company.objects.filter(address__city__icontains=searched_city)
+            else:
+                company_list = Company.objects.all()
+            return render(request, 'snapvisite/company_list.html', {'company_list': company_list})
 
 
 class CompanyUserView(DetailView):
