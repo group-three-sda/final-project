@@ -4,23 +4,20 @@
 {% block content %}
 
 
-<div class="container">
+<div class="container" style="font-family: 'Lato Light', serif;">
     <div class="row row-cols-4 g-2">
         {% for company in object_list %}
         <div class="col">
-            <div class="card w-100" style="text-align: center; margin-top: 10px; max-width: 320px">
+            <a style="text-decoration: none !important;color:inherit" href="{% url 'snapvisite:your_company' company.pk %}"><div class="card w-100" style="text-align: center; margin-top: 10px; max-width: 320px">
                 {% if company.photo %}
-                <a href="{% url 'snapvisite:your_company' company.pk %}"><img src="{{ company.photo.url }}" class="card-img-top mx-auto" style="width: 90%; height:200px; margin-top: 10px;"></a>
+                <img src="{{ company.photo.url }}" class="card-img-top mx-auto" style="width: 90%; height:250px; margin-top: 10px;">
                 {% else %}
-                <a href="{% url 'snapvisite:your_company' company.pk %}"><img src="{% static 'snapvisite/images/default_company_photo.png' %}" class="card-img-top mx-auto" style="width: 90%; height:200px; margin-top: 10px;"></a>
+                <img src="{% static 'snapvisite/images/default_company_photo.png' %}" class="card-img-top mx-auto" style="width: 90%; height:250px; margin-top: 10px;">
                 {% endif %}
                 <div class="card-body">
-                    {{ company.company_name }}
+                    <p style="font-size: 28px;"><strong>{{ company.company_name }}</strong></p>
                 </div>
-                <div class="card-footer">
-                    <a href="{% url 'snapvisite:your_company' company.pk %}"><button type="button" class="btn btn-light btn-outline-dark btn-lg">Company details</button></a>
-                </div>
-            </div>
+            </div></a>
         </div>
         {% endfor %}
     </div>
