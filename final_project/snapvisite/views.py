@@ -164,6 +164,15 @@ class UpdateServiceView(UpdateView):
         return reverse('snapvisite:your_company', kwargs={"pk": company_id})
 
 
+class CompanyListView(ListView):
+    model = Company
+    template_name = "snapvisite/company_list.html"
+
+    def get_queryset(self):
+        return Company.objects.all()
+
+
+
 
 
 
