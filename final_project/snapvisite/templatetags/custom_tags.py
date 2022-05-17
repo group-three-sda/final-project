@@ -17,6 +17,9 @@ def duration_format(value):
     if hours == 0:
         return f'{minutes}min'
     else:
-        return f'{hours}hours{minutes}minutes'
+        if minutes == 0:
+            return f'{hours}h'
+        else:
+            return f'{hours}h{minutes}min'
 
 
