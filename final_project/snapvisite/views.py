@@ -172,6 +172,11 @@ class CompanyListView(ListView):
         return Company.objects.all()
 
 
+class CompanyUserView(DetailView):
+    model = Company
+    template_name = "snapvisite/company_user_detail.html"
+
+
 
 
 
