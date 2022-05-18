@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
-from .models import Company, Category, Address, Schedule, Service
+from .models import Company, Category, Address, Schedule, Service, CompanyDay
 from account.models import Profile
 
 
@@ -110,3 +110,9 @@ class ServiceForm(forms.ModelForm):
                                                                'step': 1}))
 
 
+class CompanyDayForm(forms.ModelForm):
+    class Meta:
+        model = CompanyDay
+        exclude = ('company',)
+
+    date = forms.DateField()
