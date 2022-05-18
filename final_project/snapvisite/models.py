@@ -55,8 +55,8 @@ class Address(models.Model):
 
 
 class CompanyDay(models.Model):
-    date = models.DateField()
-    company = models.OneToOneField(Company, on_delete=models.CASCADE)
+    date = models.DateField(unique=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'companyday'

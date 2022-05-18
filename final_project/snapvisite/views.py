@@ -44,16 +44,6 @@ class YourCompanyView(DetailView):
     model = Company
     template_name = "snapvisite/your_company.html"
 
-    def get_context_data(self, **kwargs):
-        """
-        Send a schedule and service list to view
-        """
-        context = super(YourCompanyView, self).get_context_data(**kwargs)
-        id_company = self.kwargs["pk"]
-        context["schedule_list"] = Schedule.objects.filter(company__id=id_company)
-        context["services_list"] = Service.objects.filter(company__id=id_company)
-        return context
-
 
 class EditCompanyNameView(UpdateView):
     """ EDITOR """
@@ -128,6 +118,7 @@ class UpdateAddressView(UpdateView):
 
 class ScheduleView(View):
     """ EDITOR """
+
     def get(self, request, company_id):
         company = Company.objects.get(pk=company_id)
         formset = ScheduleInlineFormset(instance=company)
@@ -199,8 +190,21 @@ class CompanyUserView(DetailView):
     template_name = "snapvisite/company_user_detail.html"
 
 
+class CreateCompanyDay(CreateView):
+    model = CompanyDay
+    form_class = CompanyDayForm
+    template_name = "snapvisite/create_company_day.html"
+
+    def form_valid(self, form, *args, **kwargs):
+        form.instance.company_id = self.kwargs['company_id']
+        obj = form.save(commit=False)
+        obj.save()
+        return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": form.instance.company_id}))
 
 
+class CompanyTerminalView(ListView):
+    model = CompanyDay
+    template_name = "snapvisite/terminal.html"
 
-
-
+    def get_queryset(self):
+        return CompanyDay.objects.filter(company__id=self.kwargs["company_id"]).order_by('date')
