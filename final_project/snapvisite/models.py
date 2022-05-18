@@ -99,7 +99,6 @@ class Service(models.Model):
 
 class TimeSlot(models.Model):
     start_time = models.TimeField()
-    end_time = models.TimeField()
     status = models.BooleanField(default=True)
     company_day = models.ForeignKey(CompanyDay, on_delete=models.CASCADE)
 
@@ -109,7 +108,7 @@ class TimeSlot(models.Model):
 
     def __str__(self):
         return f'({self.company_day.company.company_name};\
-         [Available: {self.status} Id: {self.pk}]; ({self.start_time} - {self.end_time}))'
+         [Available: {self.status} Id: {self.pk}]; ({self.start_time}))'
 
 
 class Appointment(models.Model):

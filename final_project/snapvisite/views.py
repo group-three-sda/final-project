@@ -1,3 +1,5 @@
+import datetime
+
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, RedirectView, UpdateView, View
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse, reverse_lazy
@@ -207,4 +209,19 @@ class CompanyTerminalView(ListView):
     template_name = "snapvisite/terminal.html"
 
     def get_queryset(self):
-        return CompanyDay.objects.filter(company__id=self.kwargs["company_id"]).order_by('date')
+        now = datetime.now().date()
+        return CompanyDay.objects.filter(company__id=self.kwargs["company_id"], date__gte=now).order_by('date')
+
+
+#class CreateSingleTimeSlot(CreateView):
+#    model = TimeSlot
+#    template_name = 'snapvisite/company_editor.html'
+#    form_class = CompanyTimeSlotForm
+#
+#    def form_valid(self, form):
+#        form.instance.company_day_id = self.kwargs['day_id']
+#
+#        obj = form.save(commit=False)
+#        obj.save()
+#        return
+

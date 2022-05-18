@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
-from .models import Company, Category, Address, Schedule, Service, CompanyDay
+from .models import Company, Category, Address, Schedule, Service, CompanyDay, TimeSlot
 from account.models import Profile
 
 
@@ -115,4 +115,11 @@ class CompanyDayForm(forms.ModelForm):
         model = CompanyDay
         exclude = ('company',)
 
-    date = forms.DateField()
+    date = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}))
+
+
+class CompanyTimeSlotForm(forms.ModelForm):
+    class Meta:
+        model = TimeSlot
+        fields = ('start_time',)
+    start_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))

@@ -24,5 +24,6 @@ urlpatterns = [
     path('snapvisite/company-search/', CompanyListSearchView.as_view(), name='company_search'),
     path('snapvisite/company-detail/<int:pk>/', CompanyUserView.as_view(), name='company_detail'),
     path('snapvisite/create-company-day/<int:company_id>/', CreateCompanyDay.as_view(), name='create_company_day'),
-    path('snapvisite/terminal/<int:company_id>/', CompanyTerminalView.as_view(), name='company_terminal')
+    path('snapvisite/terminal/<int:company_id>/', CompanyTerminalView.as_view(), name='company_terminal'),
+    #path('snapvisite/terminal/timeslot/<int:company_id>/<int:day_id>/',  )
 ]
