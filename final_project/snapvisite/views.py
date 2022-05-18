@@ -2,15 +2,16 @@ from django.views.generic import ListView, CreateView, DetailView, TemplateView,
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
 from .forms import *
 
 
-class BaseView(TemplateView):
-    template_name = "snapvisite/base.html"
+class MainPageView(TemplateView):
+    template_name = "snapvisite/main_page.html"
 
 
-class CreateCompanyFirstStepView(CreateView):
+class CreateCompanyFirstStepView(LoginRequiredMixin, CreateView):
     """
     First step to create a company.
     Current logged user can name and select categories for his company.
@@ -30,7 +31,7 @@ class CreateCompanyFirstStepView(CreateView):
         return HttpResponseRedirect(reverse_lazy('snapvisite:company_panel'))
 
 
-class CompanyPanelView(ListView):
+class CompanyPanelView(LoginRequiredMixin, ListView):
     model = Company
     template_name = "snapvisite/company_panel.html"
 

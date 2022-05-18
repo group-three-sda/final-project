@@ -27,7 +27,7 @@ class Company(models.Model):
     photo = models.ImageField(blank=True, null=True, upload_to=save_photo)
     description = models.TextField(blank=True, null=True, max_length=310)
     created_date = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey(Profile, on_delete=models.PROTECT)
     category = models.ManyToManyField(Category)
 
     class Meta:
@@ -56,14 +56,14 @@ class Address(models.Model):
 
 class CompanyDay(models.Model):
     date = models.DateField()
-    company = models.OneToOneField(Company, on_delete=models.DO_NOTHING)
+    company = models.OneToOneField(Company, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'companyday'
         verbose_name_plural = 'companydays'
 
     def __str__(self):
-        return f'({self.company} {self.date})'
+        return f'({self.date})'
 
 
 class Schedule(models.Model):
@@ -87,40 +87,41 @@ class Service(models.Model):
     description = models.TextField()
     time = models.IntegerField(default=30, help_text="Put time in minutes. Like '60' = 1h, '30' = 30min, '90' = 1h 30min")
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    company = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'service'
         verbose_name_plural = 'services'
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name} {self.company.company_name}'
 
 
 class TimeSlot(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     status = models.BooleanField(default=True)
-    company_day = models.ForeignKey(CompanyDay, on_delete=models.DO_NOTHING)
+    company_day = models.ForeignKey(CompanyDay, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'timeslot'
         verbose_name_plural = 'timeslots'
 
     def __str__(self):
-        return f'({self.company_day.company_name};\
+        return f'({self.company_day.company.company_name};\
          [Available: {self.status} Id: {self.pk}]; ({self.start_time} - {self.end_time}))'
 
 
 class Appointment(models.Model):
     note = models.CharField(max_length=128)
-    user = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
-    time_slot = models.ForeignKey(TimeSlot, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    time_slot = models.ForeignKey(TimeSlot, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'appointment'
         verbose_name_plural = 'appointments'
 
     def __str__(self):
-        return f'(Id: {self.pk} {self.user})'
+        return f'(Id: {self.pk} {self.user.email}-{self.service.name}' \
+               f' [{self.time_slot.start_time}-{self.time_slot.end_time}])'
