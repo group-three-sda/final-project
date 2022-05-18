@@ -6,8 +6,8 @@ from .models import *
 from .forms import *
 
 
-class BaseView(TemplateView):
-    template_name = "snapvisite/base.html"
+class MainPageView(TemplateView):
+    template_name = "snapvisite/main_page.html"
 
 
 class CreateCompanyFirstStepView(CreateView):
