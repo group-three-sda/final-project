@@ -213,15 +213,15 @@ class CompanyTerminalView(ListView):
         return CompanyDay.objects.filter(company__id=self.kwargs["company_id"], date__gte=now).order_by('date')
 
 
-#class CreateSingleTimeSlot(CreateView):
-#    model = TimeSlot
-#    template_name = 'snapvisite/company_editor.html'
-#    form_class = CompanyTimeSlotForm
-#
-#    def form_valid(self, form):
-#        form.instance.company_day_id = self.kwargs['day_id']
-#
-#        obj = form.save(commit=False)
-#        obj.save()
-#        return
+class CreateSingleTimeSlotView(CreateView):
+    model = TimeSlot
+    template_name = 'snapvisite/company_editor.html'
+    form_class = CompanyTimeSlotForm
+
+    def form_valid(self, form):
+        company_id = CompanyDay.objects.get(id=self.kwargs['day_id']).company_id
+        form.instance.company_day_id = self.kwargs['day_id']
+        obj = form.save(commit=False)
+        obj.save()
+        return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'company_id': company_id}))
 

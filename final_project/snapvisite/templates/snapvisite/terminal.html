@@ -25,33 +25,22 @@
             <h3>{{  company_day.date|date:"d-m-Y" }}</h3>
             <h4>{{  company_day.date|date:"l" }}</h4>
             {% for timeslot in company_day.timeslot_set.all %}
-                {{ timeslot.start_time|time:"H:i" }}<br>
-            {% endfor %}
-            <button type="button" class="btn btn-light btn-outline-success" style="width:100%" data-bs-toggle="modal" data-bs-target="#myModal">Create TimeSlot
-            </button>
-            <div class="modal" id="myModal">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                      <h4 class="modal-title">New TimeSlot</h4>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                      Modal body..
-                    </div>
-                
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                    </div>
-                
-                  </div>
-                </div>
+            <div class="list-group">
+                {% if timeslot.status %}
+                <a href="#" class="list-group-item list-group-item-action list-group-item-success">
+                    {{ timeslot.start_time|time:"H:i" }}
+                </a>
+                {% else %}
+                <a href="#" class="list-group-item list-group-item-action list-group-item-primary">
+                    {{ timeslot.start_time|time:"H:i" }}
+                </a>
+                {% endif %}
             </div>
+            {% endfor %}
+            <br>
+            <a href="{% url 'snapvisite:single_timeslot' company_day.id %}">
+                <button type="button" class="btn btn-light btn-outline-success" style="width:100%">Create TimeSlot
+            </button></a>
         </div>
     {% endfor %}
     </div>

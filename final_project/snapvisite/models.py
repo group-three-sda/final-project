@@ -55,10 +55,11 @@ class Address(models.Model):
 
 
 class CompanyDay(models.Model):
-    date = models.DateField(unique=True)
+    date = models.DateField()
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
+        unique_together = ('company', 'date')
         verbose_name = 'companyday'
         verbose_name_plural = 'companydays'
 
