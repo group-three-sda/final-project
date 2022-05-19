@@ -1,7 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-import datetime
 
 
 class CustomAccountManager(BaseUserManager):

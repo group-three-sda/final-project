@@ -1,9 +1,9 @@
 from django import forms
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
-from django.core.exceptions import NON_FIELD_ERRORS
-from .models import Company, Category, Address, Schedule, Service, CompanyDay, TimeSlot
-from account.models import Profile
+
+from .models import Company, Category, Address, Schedule, Service, CompanyDay, TimeSlot, Appointment
 
 
 class CreateCompanyFirstStepForm(forms.ModelForm):
@@ -129,3 +129,11 @@ class CompanyTimeSlotForm(forms.ModelForm):
         model = TimeSlot
         fields = ('start_time',)
     start_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
+
+
+class CreateAppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ('note',)
+
+    note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control form-control-lg', 'rows': 3}))

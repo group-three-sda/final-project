@@ -33,9 +33,10 @@
         <div class="col-3 pt-3">
             {% for service in company.service_set.all %}
             {% if forloop.counter <= 3 %}
-            <p><strong>{{ service.name }}</strong> {{ service.price }}.-</p>
-            <button type="button" style="width:100%" class="btn btn-light btn-outline-success
-            ">Snap your visit</button>
+            <p data-bs-toggle="popover" data-bs-content="{{ service.description }}" data-bs-trigger="hover" ><strong>{{ service.name }} -</strong> {{ service.price }}.- {{ service.time|duration_format }}</p>
+            <a href="{% url 'snapvisite:user_terminal' company.id service.id %}">
+                <button type="button" style="width:100%" class="btn btn-light btn-outline-success">Snap your visit</button>
+            </a>
             {% if forloop.counter <= 2 %}
             <hr>
             {% endif %}
