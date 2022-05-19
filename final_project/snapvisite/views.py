@@ -1,12 +1,13 @@
 import datetime
 
-from django.views.generic import ListView, CreateView, DetailView, TemplateView, RedirectView, UpdateView, View
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
-from django.urls import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import *
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View
+
 from .forms import *
+from .models import *
 
 
 class MainPageView(TemplateView):
@@ -191,6 +192,13 @@ class CompanyUserView(DetailView):
     model = Company
     template_name = "snapvisite/company_user_detail.html"
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        today = datetime.datetime.now()
+        now = datetime.date(int(today.year), int(today.month), int(today.day))
+        data["days_list"] = CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now)
+        return data
+
 
 class CreateCompanyDay(CreateView):
     model = CompanyDay
@@ -209,8 +217,9 @@ class CompanyTerminalView(ListView):
     template_name = "snapvisite/terminal.html"
 
     def get_queryset(self):
-        now = datetime.now().date()
-        return CompanyDay.objects.filter(company__id=self.kwargs["company_id"], date__gte=now).order_by('date')
+        today = datetime.datetime.now()
+        now = datetime.date(int(today.year), int(today.month), int(today.day))
+        return CompanyDay.objects.filter(company__id=self.kwargs["company_id"], date__gte=now)
 
 
 class CreateSingleTimeSlotView(CreateView):
@@ -224,4 +233,34 @@ class CreateSingleTimeSlotView(CreateView):
         obj = form.save(commit=False)
         obj.save()
         return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'company_id': company_id}))
+
+
+class UserTerminal(DetailView):
+    model = Company
+    template_name = 'snapvisite/terminal_user.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data()
+        today = datetime.datetime.now()
+        now = datetime.date(int(today.year), int(today.month), int(today.day))
+        data["days"] = CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now)
+        data["service_id"] = self.kwargs["service_id"]
+        return data
+
+
+class CreateAppointmentView(CreateView):
+    model = Appointment
+    form_class = CreateAppointmentForm
+    template_name = "snapvisite/company_editor.html"
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.service_id = self.kwargs["service_id"]
+        form.instance.time_slot_id = self.kwargs["timeslot_id"]
+        obj = form.save(commit=False)
+        obj.save()
+        status_change = TimeSlot.objects.get(id=self.kwargs["timeslot_id"])
+        status_change.status = False
+        status_change.save()
+        return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
 

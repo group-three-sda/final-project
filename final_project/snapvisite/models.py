@@ -1,8 +1,7 @@
-from django.db import models
-from phonenumber_field.modelfields import PhoneNumberField
-from account.models import Profile
-from datetime import datetime, time
 import uuid
+
+from account.models import Profile
+from django.db import models
 
 
 class Category(models.Model):
@@ -62,6 +61,7 @@ class CompanyDay(models.Model):
         unique_together = ('company', 'date')
         verbose_name = 'companyday'
         verbose_name_plural = 'companydays'
+        ordering = ('date',)
 
     def __str__(self):
         return f'({self.date})'
@@ -106,6 +106,7 @@ class TimeSlot(models.Model):
     class Meta:
         verbose_name = 'timeslot'
         verbose_name_plural = 'timeslots'
+        ordering = ('start_time',)
 
     def __str__(self):
         return f'({self.company_day.company.company_name};\
@@ -113,7 +114,7 @@ class TimeSlot(models.Model):
 
 
 class Appointment(models.Model):
-    note = models.CharField(max_length=128)
+    note = models.CharField(max_length=128, null=True, blank=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     time_slot = models.ForeignKey(TimeSlot, on_delete=models.CASCADE)
@@ -124,4 +125,4 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f'(Id: {self.pk} {self.user.email}-{self.service.name}' \
-               f' [{self.time_slot.start_time}-{self.time_slot.end_time}])'
+               f' [{self.time_slot.start_time}])'

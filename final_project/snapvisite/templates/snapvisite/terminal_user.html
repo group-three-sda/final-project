@@ -1,0 +1,48 @@
+{% extends 'snapvisite/base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+
+
+{% block content %}
+
+<div class="container-fluid text-center pt-3" style="font-family: 'Lato Light', serif;">
+    <div class="row row-cols-7">
+    {% for day in days %}
+        <div class="col">
+            <h3>{{  day.date|date:"d-m-Y" }}</h3>
+            <h4>{{  day.date|date:"l" }}</h4>
+            {% for timeslot in day.timeslot_set.all %}
+            <div class="list-group">
+                {% if timeslot.status %}
+                <a href="{% url 'snapvisite:create-appointment' service_id timeslot.id %}" class="list-group-item list-group-item-action list-group-item-success">
+                    {{ timeslot.start_time|time:"H:i" }}
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+<script>
+$( document ).ready(function() {
+    $(function(){
+        $('.timepicker').timepicker({
+            timeFormat: 'HH:mm ',
+            interval: 30,
+            minTime: '6am',
+            maxTime: '23:30pm',
+            startTime: '6:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+    });
+});
+
+</script>
+
+
+{% endblock content %}
