@@ -1,10 +1,12 @@
 import datetime
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View
+from django.views.generic.detail import SingleObjectMixin
+from snapvisite.mixins import OwnerAccessMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .forms import *
 from .models import *
@@ -43,12 +45,12 @@ class CompanyPanelView(LoginRequiredMixin, ListView):
         return Company.objects.filter(owner=user)
 
 
-class YourCompanyView(DetailView):
+class YourCompanyView(OwnerAccessMixin, DetailView):
     model = Company
     template_name = "snapvisite/your_company.html"
 
 
-class EditCompanyNameView(UpdateView):
+class EditCompanyNameView(OwnerAccessMixin, UpdateView):
     """ EDITOR """
     model = Company
     form_class = UpdateCompanyNameForm
@@ -59,7 +61,7 @@ class EditCompanyNameView(UpdateView):
         return reverse("snapvisite:your_company", kwargs={"pk": pk})
 
 
-class EditCompanyPhotoView(UpdateView):
+class EditCompanyPhotoView(OwnerAccessMixin, UpdateView):
     """ EDITOR """
     model = Company
     form_class = UpdateCompanyPhotoForm
@@ -70,7 +72,7 @@ class EditCompanyPhotoView(UpdateView):
         return reverse("snapvisite:your_company", kwargs={"pk": pk})
 
 
-class EditCompanyDescriptionView(UpdateView):
+class EditCompanyDescriptionView(OwnerAccessMixin, UpdateView):
     """ EDITOR """
     model = Company
     form_class = UpdateCompanyDescriptionForm
@@ -81,7 +83,7 @@ class EditCompanyDescriptionView(UpdateView):
         return reverse("snapvisite:your_company", kwargs={"pk": pk})
 
 
-class EditCompanyCategoriesView(UpdateView):
+class EditCompanyCategoriesView(OwnerAccessMixin, UpdateView):
     """ EDITOR """
     model = Company
     form_class = EditCategoriesForm
@@ -95,7 +97,8 @@ class EditCompanyCategoriesView(UpdateView):
         return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": id_company}))
 
 
-class CreateAddressView(CreateView):
+class CreateAddressView(UserPassesTestMixin, CreateView):
+    pk_url_kwarg = 'company_id'
     """ EDITOR """
     model = Address
     form_class = AddressForm
@@ -107,8 +110,12 @@ class CreateAddressView(CreateView):
         obj.save()
         return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": form.instance.company_id}))
 
+    def test_func(self):
+        obj = self.get_object(Company.objects.all())
+        return obj.owner == self.request.user
 
-class UpdateAddressView(UpdateView):
+
+class UpdateAddressView(UserPassesTestMixin, UpdateView):
     """ EDITOR """
     model = Address
     form_class = AddressForm
@@ -118,8 +125,14 @@ class UpdateAddressView(UpdateView):
         company_id = self.kwargs['company_id']
         return reverse('snapvisite:your_company', kwargs={"pk": company_id})
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.company.owner == self.request.user
 
-class ScheduleView(View):
+
+class ScheduleView(SingleObjectMixin, OwnerAccessMixin, View):
+    pk_url_kwarg = 'company_id'
+    queryset = Company.objects.all()
     """ EDITOR """
 
     def get(self, request, company_id):
@@ -135,11 +148,15 @@ class ScheduleView(View):
             return redirect('snapvisite:your_company', pk=company.id)
 
 
-class CreateServiceView(CreateView):
+class CreateServiceView(UserPassesTestMixin, CreateView):
+    pk_url_kwarg = 'company_id'
     """ EDITOR """
-    model = Service
     form_class = ServiceForm
     template_name = 'snapvisite/company_editor.html'
+
+    def test_func(self):
+        obj = self.get_object(Company.objects.all())
+        return obj.owner == self.request.user
 
     def form_valid(self, form, *args, **kwargs):
         form.instance.company_id = self.kwargs['company_id']
@@ -148,7 +165,7 @@ class CreateServiceView(CreateView):
         return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": form.instance.company_id}))
 
 
-class UpdateServiceView(UpdateView):
+class UpdateServiceView(UserPassesTestMixin, UpdateView):
     """ EDITOR """
     model = Service
     form_class = ServiceForm
@@ -157,6 +174,10 @@ class UpdateServiceView(UpdateView):
     def get_success_url(self):
         company_id = self.kwargs['company_id']
         return reverse('snapvisite:your_company', kwargs={"pk": company_id})
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.company.owner == self.request.user
 
 
 class CompanyListSearchView(View):
@@ -200,10 +221,15 @@ class CompanyUserView(DetailView):
         return data
 
 
-class CreateCompanyDay(CreateView):
+class CreateCompanyDay(UserPassesTestMixin, CreateView):
+    pk_url_kwarg = 'company_id'
     model = CompanyDay
     form_class = CompanyDayForm
     template_name = "snapvisite/create_company_day.html"
+
+    def test_func(self):
+        obj = self.get_object(Company.objects.all())
+        return obj.owner == self.request.user
 
     def form_valid(self, form, *args, **kwargs):
         form.instance.company_id = self.kwargs['company_id']
@@ -214,6 +240,7 @@ class CreateCompanyDay(CreateView):
 
 class CompanyTerminalView(ListView):
     model = CompanyDay
+    pk_url_kwarg = 'company_id'
     template_name = "snapvisite/terminal.html"
 
     def get_queryset(self):
