@@ -21,6 +21,7 @@
 			<h5 class="display-6 shadow-sm" style="margin-left: 12px">  {{ user.phone_number|default:"edit your profile to add" }}</h5>
 			<br>
 			<a href="{% url 'account:profile_edit' request.user.id %}"><button type="button" class="btn btn-outline-dark btn-lg" style="margin-bottom: 20px; width: 40%; font-size: 28px; background-color: white; color: black;">Edit</button></a>
+			<a href="{% url 'account:password-change' %}"><button type="button" class="btn btn-outline-dark btn-lg" style="margin-bottom: 20px; width: 40%; font-size: 28px; background-color: white; color: black;">Change password</button></a>
 		</div>
         <div class="col-3"></div>
 	</div>
