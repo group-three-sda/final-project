@@ -117,7 +117,7 @@ class Appointment(models.Model):
     note = models.CharField(max_length=128, null=True, blank=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    time_slot = models.ForeignKey(TimeSlot, on_delete=models.CASCADE)
+    time_slot = models.OneToOneField(TimeSlot, on_delete=models.CASCADE)
     payment_status = models.BooleanField(default=False)
 
     class Meta:
