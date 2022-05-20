@@ -13,17 +13,15 @@
 </div>
 <div class="container" style="font-family: 'Lato Light', serif;">
         {% for appointment in appointments_future %}
-        <div class="d-grid" style="height:75px; border: 0.5px solid black;">
-            <button type="button" class="btn btn-light btn-block" style="background: rgba(76, 175, 80, 0.3);">
-                <strong>{{ appointment.create_appointment_code }}</strong>
-        </button>
-        </div>
+        {% include "account/appointment_row.html" %}
         <br>
         {% endfor %}
-        <p>Teraz historia</p>
+        <a style="width: 300px;" href="#history" class="btn btn-outline-dark btn-lg mx-auto" data-bs-toggle="collapse">Show History</a>
+        <div id="history" class="collapse">
         {% for appointment in appointments_history %}
-        <p>{{ appointment.note }}</p>
+        {% include "account/appointment_row_outdated.html" %}
         {% endfor %}
+        </div>
 </div>
 
 

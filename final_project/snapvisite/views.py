@@ -257,8 +257,8 @@ class CreateAppointmentView(CreateView):
         form.instance.user = self.request.user
         form.instance.service_id = self.kwargs["service_id"]
         form.instance.time_slot_id = self.kwargs["timeslot_id"]
-        #form.instance.appointment_code = Appointment.create_appointment_code(form)
         obj = form.save(commit=False)
+        form.instance.appointment_code = Appointment.create_appointment_code(obj)
         obj.save()
         status_change = TimeSlot.objects.get(id=self.kwargs["timeslot_id"])
         status_change.status = False

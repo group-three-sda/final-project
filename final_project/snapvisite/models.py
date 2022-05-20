@@ -120,7 +120,7 @@ class Appointment(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     time_slot = models.OneToOneField(TimeSlot, on_delete=models.CASCADE)
     payment_status = models.BooleanField(default=False)
-    #appointment_code = models.CharField(max_length=10)
+    appointment_code = models.CharField(max_length=50, default="123")
 
     class Meta:
         verbose_name = 'appointment'
@@ -131,5 +131,5 @@ class Appointment(models.Model):
                f' [{self.time_slot.start_time}])'
 
     def create_appointment_code(self):
-        return f'{self.pk}{self.user.pk}{self.service.company.company_name[:3]}{random.randint(1000,9999)}'
+        return f'{self.user.pk}{self.service.company.company_name[:3]}{uuid.uuid1()}'
 
