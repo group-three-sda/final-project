@@ -110,7 +110,7 @@ class TimeSlot(models.Model):
 
     def __str__(self):
         return f'({self.company_day.company.company_name};\
-         [Available: {self.status} Id: {self.pk}]; ({self.start_time}))'
+         {self.company_day.date}[Available: {self.status} Id: {self.pk}]; ({self.start_time}))'
 
 
 class Appointment(models.Model):

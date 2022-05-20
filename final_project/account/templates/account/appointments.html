@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'snapvisite/base.html' %}
+{% load static %}
+{% load custom_tags %}
 
-</body>
-</html>
+{% block content %}
+
+
+<div class="container-fluid" style="font-family: 'Lato Light', serif;">
+        <div class="row text-center">
+                <h1>{{ request.user.user_name|title }} here you can see your visits.</h1>
+                <hr style="height: 2px;">
+        </div>
+</div>
+<div class="container" style="font-family: 'Lato Light', serif;">
+        {% for appointment in appointments_future %}
+        <div class="d-grid" style="height:75px; border: 0.5px solid black;">
+            <button type="button" class="btn btn-light btn-block">
+                <strong>{{ appointment }}</strong>
+        </button>
+        </div>
+        <br>
+        {% endfor %}
+        <p>Teraz historia</p>
+        {% for appointment in appointments_history %}
+        <p>{{ appointment.note }}</p>
+        {% endfor %}
+</div>
+
+
+
+{% endblock content %}

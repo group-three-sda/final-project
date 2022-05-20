@@ -4,6 +4,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, View
 from django.shortcuts import render
 from .forms import RegistrationProfileForm, UpdateProfileForm, GoToForm
 from .models import Profile
+from snapvisite.models import Appointment
 from .utils import generate_content, get_today
 
 
@@ -33,7 +34,13 @@ class CheckAppointmentsView(DetailView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data()
-
+        today = datetime.datetime.now()
+        now = datetime.date(int(today.year), int(today.month), int(today.day))
+        data['appointments_future'] = Appointment.objects.filter(user__id=self.kwargs["pk"],
+                                                                 time_slot__company_day__date__gte=now)
+        data['appointments_history'] = Appointment.objects.filter(user__id=self.kwargs["pk"],
+                                                                  time_slot__company_day__date__lte=now)
+        return data
 
 
 class TimeTableView(View):

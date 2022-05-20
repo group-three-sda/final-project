@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CreateProfileView, DetailProfileView, UpdateProfileView, TimeTableView
+from .views import CheckAppointmentsView, CreateProfileView, DetailProfileView, UpdateProfileView, TimeTableView
 from django.contrib.auth import views as auth_views
 from django.urls import reverse, reverse_lazy
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path('profile-detail/<int:pk>/', DetailProfileView.as_view(), name='profile_detail'),
     path('profile-edit/<int:pk>/', UpdateProfileView.as_view(), name='profile_edit'),
     path('company/timetable/<str:option>/<str:data>/', TimeTableView.as_view(), name='timetable'),
+    path('appointment-profile/<int:pk>/', CheckAppointmentsView.as_view(), name='appointments_user')
 ]

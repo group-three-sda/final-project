@@ -12,7 +12,7 @@
 
     <p style="font-size: 22px">Welcome, <strong>{{ request.user.user_name }}</strong></p>
     <!-- Future visits View -->
-    <button type="button" class="btn btn-outline-dark btn-lg">Check yours visits</button>
+    <a href="{% url 'account:appointments_user' request.user.id %}"><button type="button" class="btn btn-outline-dark btn-lg">Check yours visits</button></a>
     <br><br>
     <!-- Account Detail View -->
     <a href="{% url 'account:profile_detail' request.user.id %}"><button type="button" class="btn btn-outline-dark btn-lg">See yours details</button></a><br>
