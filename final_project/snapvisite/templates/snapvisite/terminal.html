@@ -21,7 +21,7 @@
 <div class="container-fluid text-center pt-3" style="font-family: 'Lato Light', serif;">
     <div class="row row-cols-7">
     {% for company_day in object_list %}
-        <div class="col">
+        <div class="col" style="max-width: 13%">
             <h3>{{  company_day.date|date:"d-m-Y" }}</h3>
             <h4>{{  company_day.date|date:"l" }}</h4>
             {% for timeslot in company_day.timeslot_set.all %}
@@ -31,9 +31,37 @@
                     {{ timeslot.start_time|time:"H:i" }}
                 </a>
                 {% else %}
-                <a href="#" class="list-group-item list-group-item-action list-group-item-primary">
+                {% for appointment in timeslot.appointment_set.all %}
+                <button type="button" class="list-group-item list-group-item-action list-group-item-primary" data-bs-toggle="modal" data-bs-target="#modal{{ appointment.id }}">
                     {{ timeslot.start_time|time:"H:i" }}
-                </a>
+                </button>
+                <div class="modal fade" id="modal{{ appointment.id }}" tabindex="-1" aria-labelledby="descriptionLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title" id="descriptionLabel" style="text-align: start">
+                                    <strong>{{ timeslot.company_day.date|date:"l" }} - {{ timeslot.start_time|time:"H:i" }}</strong></h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                            </div>
+
+                            <div class="modal-body" style="text-align: start">
+                                <h4><strong>Service:</strong> {{ appointment.service.name }}</h4>
+                                <h4><strong>Client:</strong> {{ appointment.user.first_name }} {{ appointment.user.last_name }}</h4>
+                                <h4><strong>Phone number:</strong> {{ appointment.user.phone_number }}</h4>
+                                <h4><strong>Additional information:</strong>
+                                    <textarea disabled rows="5" style="font-size: 20px; width: 100%">{{ appointment.note }}</textarea>
+                                </h4>
+                                {% if appointment.payment_status %}
+                                <h2 style="margin-top: 30px; border-top: solid 1px black; padding-top: 20px">Payment status: <span class="badge bg-success">Paid</span> </h2>
+                                {% else %}
+                                <h2 style="margin-top: 30px ;border-top: solid 1px black; padding-top: 20px">Payment status: <span class="badge bg-danger">Not paid</span></h2>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
                 {% endif %}
             </div>
             {% endfor %}

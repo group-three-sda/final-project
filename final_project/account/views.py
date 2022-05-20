@@ -27,6 +27,15 @@ class UpdateProfileView(UpdateView):
         return reverse("account:profile_detail", kwargs={"pk": pk})
 
 
+class CheckAppointmentsView(DetailView):
+    model = Profile
+    template_name = 'account/appointments.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data()
+
+
+
 class TimeTableView(View):
     form_class = GoToForm
     date_format = "%Y-%m-%d"
