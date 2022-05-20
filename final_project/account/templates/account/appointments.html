@@ -14,8 +14,8 @@
 <div class="container" style="font-family: 'Lato Light', serif;">
         {% for appointment in appointments_future %}
         <div class="d-grid" style="height:75px; border: 0.5px solid black;">
-            <button type="button" class="btn btn-light btn-block">
-                <strong>{{ appointment }}</strong>
+            <button type="button" class="btn btn-light btn-block" style="background: rgba(76, 175, 80, 0.3);">
+                <strong>{{ appointment.create_appointment_code }}</strong>
         </button>
         </div>
         <br>
