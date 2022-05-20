@@ -31,11 +31,11 @@
                     {{ timeslot.start_time|time:"H:i" }}
                 </a>
                 {% else %}
-                {% for appointment in timeslot.appointment_set.all %}
-                <button type="button" class="list-group-item list-group-item-action list-group-item-primary" data-bs-toggle="modal" data-bs-target="#modal{{ appointment.id }}">
+
+                <button type="button" class="list-group-item list-group-item-action list-group-item-primary" data-bs-toggle="modal" data-bs-target="#modal{{ timeslot.appointment.id }}">
                     {{ timeslot.start_time|time:"H:i" }}
                 </button>
-                <div class="modal fade" id="modal{{ appointment.id }}" tabindex="-1" aria-labelledby="descriptionLabel" aria-hidden="true">
+                <div class="modal fade" id="modal{{ timeslot.appointment.id }}" tabindex="-1" aria-labelledby="descriptionLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -45,13 +45,13 @@
                             </div>
 
                             <div class="modal-body" style="text-align: start">
-                                <h4><strong>Service:</strong> {{ appointment.service.name }}</h4>
-                                <h4><strong>Client:</strong> {{ appointment.user.first_name }} {{ appointment.user.last_name }}</h4>
-                                <h4><strong>Phone number:</strong> {{ appointment.user.phone_number }}</h4>
+                                <h4><strong>Service:</strong> {{ timeslot.appointment.service.name }}</h4>
+                                <h4><strong>Client:</strong> {{ timeslot.appointment.user.first_name }} {{ timeslot.appointment.user.last_name }}</h4>
+                                <h4><strong>Phone number:</strong> {{ timeslot.appointment.user.phone_number }}</h4>
                                 <h4><strong>Additional information:</strong>
-                                    <textarea disabled rows="5" style="font-size: 20px; width: 100%">{{ appointment.note }}</textarea>
+                                    <textarea disabled rows="5" style="font-size: 20px; width: 100%">{{ timeslot.appointment.note }}</textarea>
                                 </h4>
-                                {% if appointment.payment_status %}
+                                {% if timeslot.appointment.payment_status %}
                                 <h2 style="margin-top: 30px; border-top: solid 1px black; padding-top: 20px">Payment status: <span class="badge bg-success">Paid</span> </h2>
                                 {% else %}
                                 <h2 style="margin-top: 30px ;border-top: solid 1px black; padding-top: 20px">Payment status: <span class="badge bg-danger">Not paid</span></h2>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+
                 {% endif %}
             </div>
             {% endfor %}
