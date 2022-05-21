@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView, FormView
 from django.views.generic.detail import SingleObjectMixin
@@ -283,8 +284,8 @@ class CompanyTerminalView(OwnerAccessMixin, DetailView):
         data = super().get_context_data()
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
-        data['days'] = CompanyDay.objects.filter(
-            company__id=self.kwargs["pk"], date__gte=now)
+        page = self.request.GET.get('page')
+        data['days'] = Paginator(CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now), 7).get_page(page)
         return data
 
 
@@ -338,8 +339,10 @@ class UserTerminal(DetailView):
         data = super().get_context_data()
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
-        data["days"] = CompanyDay.objects.filter(
-            company__id=self.kwargs["pk"], date__gte=now)
+        page = self.request.GET.get('page')
+        data['days'] = Paginator(CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now), 7).get_page(
+            page)
+
         data["service_id"] = self.kwargs["service_id"]
         return data
 
