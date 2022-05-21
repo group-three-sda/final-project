@@ -81,8 +81,10 @@ class ScheduleDayForm(forms.ModelForm):
     class Meta:
         model = Schedule
         fields = ('day_of_week', 'open_time', 'close_time')
+        
     open_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
     close_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+
 
 
 ScheduleInlineFormset = inlineformset_factory(
@@ -128,6 +130,7 @@ class CompanyTimeSlotForm(forms.ModelForm):
     class Meta:
         model = TimeSlot
         fields = ('start_time',)
+
     start_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
 
 
@@ -149,9 +152,14 @@ class CompanyTimeSlotMultipleForm(forms.Form):
             raise ValidationError({"to_time": "Start time have to be lower than end time"})
 
 
+
 class CreateAppointmentForm(forms.ModelForm):
+    CHOICES = [(True, 'Pay with card now.'), (False, 'Pay by cash on visit.')]
+
     class Meta:
         model = Appointment
-        fields = ('note',)
+        fields = ('note', 'payment_status')
 
-    note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control form-control-lg', 'rows': 3}))
+    note = forms.CharField(label='Additional information', widget=forms.Textarea(
+        attrs={'class': 'form-control form-control-lg', 'rows': 3}))
+    payment_status = forms.ChoiceField(label='Payment option', widget=forms.RadioSelect, choices=CHOICES)

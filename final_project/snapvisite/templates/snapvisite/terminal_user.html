@@ -9,8 +9,11 @@
 <div class="container-fluid text-center pt-3" style="font-family: 'Lato Light', serif;">
     <div class="row row-cols-7">
     {% for day in days %}
+
     {% if day.timeslot_set.exists %}
-        <div class="col">
+      
+        <div class="col" style="max-width: 13%">
+
             <h3>{{  day.date|date:"d-m-Y" }}</h3>
             <h4>{{  day.date|date:"l" }}</h4>
             {% for timeslot in day.timeslot_set.all %}
