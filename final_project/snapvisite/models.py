@@ -118,7 +118,7 @@ class Appointment(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     time_slot = models.OneToOneField(TimeSlot, on_delete=models.CASCADE)
-    payment_status = models.BooleanField(default=False)
+    payment_status = models.BooleanField(default=False, choices=[(True, 'Pay with card now'), (False, 'Pay by cash on visit')])
     appointment_code = models.CharField(max_length=50, default="123")
 
     class Meta:

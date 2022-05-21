@@ -81,6 +81,7 @@ class ScheduleDayForm(forms.ModelForm):
     class Meta:
         model = Schedule
         fields = ('day_of_week', 'open_time', 'close_time')
+
     open_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
     close_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
 
@@ -128,12 +129,17 @@ class CompanyTimeSlotForm(forms.ModelForm):
     class Meta:
         model = TimeSlot
         fields = ('start_time',)
+
     start_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
 
 
 class CreateAppointmentForm(forms.ModelForm):
+    CHOICES = [(True, 'Pay with card now.'), (False, 'Pay by cash on visit.')]
+
     class Meta:
         model = Appointment
-        fields = ('note',)
+        fields = ('note', 'payment_status')
 
-    note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control form-control-lg', 'rows': 3}))
+    note = forms.CharField(label='Additional information', widget=forms.Textarea(
+        attrs={'class': 'form-control form-control-lg', 'rows': 3}))
+    payment_status = forms.ChoiceField(label='Payment option', widget=forms.RadioSelect, choices=CHOICES)
