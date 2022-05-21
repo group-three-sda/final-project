@@ -300,7 +300,7 @@ class UserTerminal(DetailView):
 class CreateAppointmentView(CreateView):
     model = Appointment
     form_class = CreateAppointmentForm
-    template_name = "snapvisite/company_editor.html"
+    template_name = "snapvisite/appointment.html"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -313,4 +313,3 @@ class CreateAppointmentView(CreateView):
         status_change.status = False
         status_change.save()
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
-
