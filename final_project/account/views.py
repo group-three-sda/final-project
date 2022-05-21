@@ -1,16 +1,23 @@
 import datetime
+
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView, View
-from django.shortcuts import render
-from .forms import RegistrationProfileForm, UpdateProfileForm
-from .models import Profile
+
+from django.views.generic import CreateView, DetailView, UpdateView
 from snapvisite.models import Appointment
 
+from .forms import RegistrationProfileForm, UpdateProfileForm
+from .models import Profile
+from django.contrib.messages.views import SuccessMessageMixin
 
-class CreateProfileView(CreateView):
+
+
+
+
+class CreateProfileView(SuccessMessageMixin, CreateView):
     form_class = RegistrationProfileForm
     template_name = 'account/registration_form.html'
     success_url = reverse_lazy('snapvisite:home-page')
+    success_message = 'Your account has been created successfully.'
 
 
 class DetailProfileView(DetailView):
@@ -40,4 +47,3 @@ class CheckAppointmentsView(DetailView):
         data['appointments_history'] = Appointment.objects.filter(user__id=self.kwargs["pk"],
                                                                   time_slot__company_day__date__lt=now)
         return data
-

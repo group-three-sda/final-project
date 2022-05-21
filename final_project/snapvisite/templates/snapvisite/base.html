@@ -28,6 +28,14 @@
     {% include "snapvisite/nav_bar.html" %}
 </header>
 
+{% if messages %}
+    <div class="container">
+        {% for message in messages %}
+            <div {% if message.tags %} class="{{ message.tags }} alert-success text-center" role="alert"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
 <!-- MAIN CONTENT PART -->
 {% block content %}
 {% endblock content %}
