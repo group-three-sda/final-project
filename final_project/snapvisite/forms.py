@@ -112,6 +112,15 @@ class ServiceForm(forms.ModelForm):
                                                                'step': 1}))
 
 
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ('phone_number', 'email')
+
+    phone_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
+
+
 class CompanyDayForm(forms.ModelForm):
     class Meta:
         model = CompanyDay

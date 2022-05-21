@@ -37,7 +37,3 @@ class UpdateProfileForm(forms.ModelForm):
 #                    'class': 'form-control'}),
 #                  error_messages={
 #                    'required': 'The password can not be empty'})
-
-
-class GoToForm(forms.Form):
-    searched_date = forms.CharField(max_length=10, label="")
