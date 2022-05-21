@@ -2,7 +2,6 @@ import uuid
 
 from account.models import Profile
 from django.db import models
-import random
 
 
 class Category(models.Model):
