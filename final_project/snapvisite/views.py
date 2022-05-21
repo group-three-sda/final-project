@@ -187,6 +187,17 @@ class DeleteServiceView(DeleteView):
         return reverse('snapvisite:your_company', kwargs={"pk": self.kwargs['company_id']})
 
 
+class UpdateContactView(UpdateView):
+    """ EDITOR """
+    model = Company
+    form_class = ContactForm
+    template_name = "snapvisite/company_editor.html"
+
+    def get_success_url(self):
+        pk = self.kwargs['pk']
+        return reverse('snapvisite:your_company', kwargs={"pk": pk})
+
+
 class CompanyListSearchView(View):
 
     def post(self, request):

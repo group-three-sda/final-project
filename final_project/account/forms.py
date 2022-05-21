@@ -20,7 +20,3 @@ class UpdateProfileForm(forms.ModelForm):
             'phone_number': forms.TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'example:.. +48 123 456 789'}),
         }
-
-
-class GoToForm(forms.Form):
-    searched_date = forms.CharField(max_length=10, label="")

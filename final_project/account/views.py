@@ -1,10 +1,12 @@
 import datetime
+
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView, View
-from django.shortcuts import render
+
+from django.views.generic import CreateView, DetailView, UpdateView
+from snapvisite.models import Appointment
+
 from .forms import RegistrationProfileForm, UpdateProfileForm
 from .models import Profile
-from snapvisite.models import Appointment
 
 
 
@@ -41,4 +43,3 @@ class CheckAppointmentsView(DetailView):
         data['appointments_history'] = Appointment.objects.filter(user__id=self.kwargs["pk"],
                                                                   time_slot__company_day__date__lt=now)
         return data
-
