@@ -29,15 +29,38 @@
     <div class="row row-cols-7">
     {% for company_day in days %}
         <div class="col" style="max-width: 13%">
-            <a href="{% url 'snapvisite:delete_company_day' company_day.id object.id %}" <button style="width: 3px; height: 3px" type="button" class="btn-close" aria-label="Close"></button></a>
+            <a href="{% url 'snapvisite:delete_company_day' company_day.id object.id %}"><button style="width: 3px; height: 3px" type="button" class="btn-close" aria-label="Close"></button></a>
             <h3>{{  company_day.date|date:"d-m-Y" }}</h3>
             <h4>{{  company_day.date|date:"l" }}</h4>
             {% for timeslot in company_day.timeslot_set.all %}
             <div class="list-group">
+
+                <!-- FREE TIMESLOT -->
                 {% if timeslot.status %}
-                <a href="#" class="list-group-item list-group-item-action list-group-item-success">
+
+                <button type="button" class="list-group-item list-group-item-action list-group-item-success" data-bs-toggle="modal" data-bs-target="#modal_delete{{ timeslot.id }}">
                     {{ timeslot.start_time|time:"H:i" }}
-                </a>
+                </button>
+
+
+                <div class="modal fade" id="modal_delete{{ timeslot.id }}" tabindex="-1" aria-labelledby="descriptionLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title" id="descriptionLabel" style="text-align: start">
+                                    <strong>{{ timeslot.company_day.date|date:"l" }} - {{ timeslot.start_time|time:"H:i" }}</strong></h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                            </div>
+
+                            <div class="modal-body" style="text-align: start">
+                                <a href="{% url 'snapvisite:delete_timeslot' timeslot.id object.id %}"><button  type="button" class="btn btn-danger" aria-label="Close">Delete Timeslot</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- OCCUPIED TIMESLOT -->
                 {% else %}
 
                 <button type="button" class="list-group-item list-group-item-action list-group-item-primary" data-bs-toggle="modal" data-bs-target="#modal{{ timeslot.appointment.id }}">

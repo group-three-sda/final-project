@@ -270,6 +270,13 @@ class CreateSingleTimeSlotView(CreateView):
         return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'pk': company_id}))
 
 
+class DeleteTimeSlotView(DeleteView):
+    model = TimeSlot
+
+    def get_success_url(self):
+        return reverse('snapvisite:company_terminal', kwargs={"pk": self.kwargs['company_id']})
+
+
 class UserTerminal(DetailView):
     model = Company
     template_name = 'snapvisite/terminal_user.html'
