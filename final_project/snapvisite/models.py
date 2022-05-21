@@ -119,6 +119,7 @@ class Appointment(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     time_slot = models.OneToOneField(TimeSlot, on_delete=models.CASCADE)
     payment_status = models.BooleanField(default=False)
+    appointment_code = models.CharField(max_length=50, default="123")
 
     class Meta:
         verbose_name = 'appointment'
@@ -127,3 +128,7 @@ class Appointment(models.Model):
     def __str__(self):
         return f'(Id: {self.pk} {self.user.email}-{self.service.name}' \
                f' [{self.time_slot.start_time}])'
+
+    def create_appointment_code(self):
+        return f'{self.user.pk}{self.service.company.company_name[:3]}{uuid.uuid1()}'
+

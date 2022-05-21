@@ -1,6 +1,6 @@
 {% load static %}
 {% load custom_tags %}
-    <div class="row mt-3 " style="border: 1px solid lightgray; height: 230px;background-color: rgba(76, 175, 80, 0.25);">
+    <div class="row mt-3 bg-light" style="border: 1px solid lightgray; height: 230px;">
         <div class="col-2" style="height: 200px">
             {% if appointment.service.company.photo %}
             <a href="{% url 'snapvisite:company_detail' appointment.service.company.pk %}"><img class="pt-3" src="{{ appointment.service.company.photo.url }}" style="height: 200px; width: 200px;"></a>
