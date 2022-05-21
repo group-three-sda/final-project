@@ -31,5 +31,7 @@ urlpatterns = [
     path('snapvisite/terminal/delete-work-day/<int:pk>/<int:company_id>/', DeleteCompanyDayView.as_view(),
          name='delete_company_day'),
     path('snapvisite/terminal/delete-timeslot/<int:pk>/<int:company_id>/', DeleteTimeSlotView.as_view(),
-         name='delete_timeslot')
+         name='delete_timeslot'),
+    path('snapvisite/terminal/delete-service/<int:pk>/<int:company_id>/', DeleteServiceView.as_view(),
+         name='delete_service')
 ]

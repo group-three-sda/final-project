@@ -180,6 +180,13 @@ class UpdateServiceView(UserPassesTestMixin, UpdateView):
         return obj.company.owner == self.request.user
 
 
+class DeleteServiceView(DeleteView):
+    model = Service
+
+    def get_success_url(self):
+        return reverse('snapvisite:your_company', kwargs={"pk": self.kwargs['company_id']})
+
+
 class CompanyListSearchView(View):
 
     def post(self, request):
