@@ -252,7 +252,7 @@ class DeleteCompanyDayView(DeleteView):
         return reverse('snapvisite:company_terminal', kwargs={"pk": self.kwargs['company_id']})
 
 
-class CompanyTerminalView(DetailView):
+class CompanyTerminalView(OwnerAccessMixin, DetailView):
     model = Company
     template_name = "snapvisite/terminal.html"
 
