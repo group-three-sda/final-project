@@ -136,7 +136,7 @@ class CompanyTimeSlotMultipleForm(forms.Form):
     to_time = forms.TimeField(label="End Time", widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
     delta = forms.IntegerField(label="Time step(in minutes)",
                                widget=forms.NumberInput(attrs={
-                                   'class': 'form-control form-control-lg', 'min': '15',
+                                   'class': 'form-control form-control-lg',
                                    'placeholder': 'Enter minutes. What step to create a new slot.'
                                }))
 
