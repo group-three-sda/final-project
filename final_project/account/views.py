@@ -10,9 +10,6 @@ from .models import Profile
 from django.contrib.messages.views import SuccessMessageMixin
 
 
-
-
-
 class CreateProfileView(SuccessMessageMixin, CreateView):
     form_class = RegistrationProfileForm
     template_name = 'account/registration_form.html'
