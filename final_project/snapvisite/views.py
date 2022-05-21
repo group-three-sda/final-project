@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View
+from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 from snapvisite.mixins import OwnerAccessMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -180,6 +180,13 @@ class UpdateServiceView(UserPassesTestMixin, UpdateView):
         return obj.company.owner == self.request.user
 
 
+class DeleteServiceView(DeleteView):
+    model = Service
+
+    def get_success_url(self):
+        return reverse('snapvisite:your_company', kwargs={"pk": self.kwargs['company_id']})
+
+
 class CompanyListSearchView(View):
 
     def post(self, request):
@@ -235,18 +242,26 @@ class CreateCompanyDay(UserPassesTestMixin, CreateView):
         form.instance.company_id = self.kwargs['company_id']
         obj = form.save(commit=False)
         obj.save()
-        return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": form.instance.company_id}))
+        return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={"pk": form.instance.company_id}))
 
 
-class CompanyTerminalView(ListView):
+class DeleteCompanyDayView(DeleteView):
     model = CompanyDay
-    pk_url_kwarg = 'company_id'
+
+    def get_success_url(self):
+        return reverse('snapvisite:company_terminal', kwargs={"pk": self.kwargs['company_id']})
+
+
+class CompanyTerminalView(DetailView):
+    model = Company
     template_name = "snapvisite/terminal.html"
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data()
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
-        return CompanyDay.objects.filter(company__id=self.kwargs["company_id"], date__gte=now)
+        data['days'] = CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now)
+        return data
 
 
 class CreateSingleTimeSlotView(CreateView):
@@ -259,7 +274,14 @@ class CreateSingleTimeSlotView(CreateView):
         form.instance.company_day_id = self.kwargs['day_id']
         obj = form.save(commit=False)
         obj.save()
-        return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'company_id': company_id}))
+        return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'pk': company_id}))
+
+
+class DeleteTimeSlotView(DeleteView):
+    model = TimeSlot
+
+    def get_success_url(self):
+        return reverse('snapvisite:company_terminal', kwargs={"pk": self.kwargs['company_id']})
 
 
 class UserTerminal(DetailView):
