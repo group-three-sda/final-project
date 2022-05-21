@@ -5,13 +5,15 @@ from django.shortcuts import render
 from .forms import RegistrationProfileForm, UpdateProfileForm
 from .models import Profile
 from snapvisite.models import Appointment
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 
-class CreateProfileView(CreateView):
+class CreateProfileView(SuccessMessageMixin, CreateView):
     form_class = RegistrationProfileForm
     template_name = 'account/registration_form.html'
     success_url = reverse_lazy('snapvisite:home-page')
+    success_message = 'Your account has been created successfully.'
 
 
 class DetailProfileView(DetailView):

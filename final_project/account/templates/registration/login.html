@@ -11,12 +11,21 @@
     <div class="col-6">
         <form method="post">
             <div class="mb-3 mt-3 text-center">
+
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <div class="alert alert-danger">
+                        {{error|escape}}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
               <label for="id_username"><h1 class="display-6">Email</h1></label>
-              <input type="text" class="form-control" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" 
-              required id="id_username"> 
+              <input type="text" class="form-control" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150"
+              required id="id_username">
             </div>
             <div class="mb-3 mt-3 text-center">
-              <label for="id_password"><h1 class="display-6">Password</h1></label>  
+              <label for="id_password"><h1 class="display-6">Password</h1></label>
               <input type="password" class="form-control" name="password" autocomplete="current-password" required id="id_password">
               <p style="font-size: 18px">Forgot your <strong>password?</strong> <a style="color: green; text-decoration: none" href="{% url 'login' %}">Change password</a></p>
             </div>
