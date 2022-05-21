@@ -2,6 +2,7 @@ import uuid
 
 from account.models import Profile
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Category(models.Model):
@@ -28,6 +29,8 @@ class Company(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.PROTECT)
     category = models.ManyToManyField(Category)
+    phone_number = PhoneNumberField(blank=True, null=True)
+    email = models.EmailField(verbose_name='email', max_length=80, unique=True, blank=True, null=True)
 
     class Meta:
         verbose_name = 'company'
@@ -86,7 +89,8 @@ class Schedule(models.Model):
 class Service(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField()
-    time = models.IntegerField(default=30, help_text="Put time in minutes. Like '60' = 1h, '30' = 30min, '90' = 1h 30min")
+    time = models.IntegerField(default=30,
+                               help_text="Put time in minutes. Like '60' = 1h, '30' = 30min, '90' = 1h 30min")
     price = models.DecimalField(max_digits=6, decimal_places=2)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
@@ -118,7 +122,8 @@ class Appointment(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     time_slot = models.OneToOneField(TimeSlot, on_delete=models.CASCADE)
-    payment_status = models.BooleanField(default=False, choices=[(True, 'Pay with card now'), (False, 'Pay by cash on visit')])
+    payment_status = models.BooleanField(default=False,
+                                         choices=[(True, 'Pay with card now'), (False, 'Pay by cash on visit')])
     appointment_code = models.CharField(max_length=50, default="123")
 
     class Meta:
@@ -131,4 +136,3 @@ class Appointment(models.Model):
 
     def create_appointment_code(self):
         return f'{self.user.pk}{self.service.company.company_name[:3]}{uuid.uuid1()}'
-
