@@ -7,7 +7,6 @@ from .models import Profile
 from snapvisite.models import Appointment
 
 
-
 class CreateProfileView(CreateView):
     form_class = RegistrationProfileForm
     template_name = 'account/registration_form.html'
