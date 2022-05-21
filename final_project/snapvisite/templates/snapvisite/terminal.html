@@ -15,13 +15,21 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'snapvisite:create_company_day' object.id %}">CompanyDay</a>
+              </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
 <div class="container-fluid text-center pt-3" style="font-family: 'Lato Light', serif;">
     <div class="row row-cols-7">
-    {% for company_day in object_list %}
+    {% for company_day in days %}
         <div class="col" style="max-width: 13%">
+            <a href="{% url 'snapvisite:delete_company_day' company_day.id object.id %}" <button style="width: 3px; height: 3px" type="button" class="btn-close" aria-label="Close"></button></a>
             <h3>{{  company_day.date|date:"d-m-Y" }}</h3>
             <h4>{{  company_day.date|date:"l" }}</h4>
             {% for timeslot in company_day.timeslot_set.all %}

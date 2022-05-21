@@ -39,7 +39,7 @@ class CheckAppointmentsView(DetailView):
         data['appointments_future'] = Appointment.objects.filter(user__id=self.kwargs["pk"],
                                                                  time_slot__company_day__date__gte=now)
         data['appointments_history'] = Appointment.objects.filter(user__id=self.kwargs["pk"],
-                                                                  time_slot__company_day__date__lte=now)
+                                                                  time_slot__company_day__date__lt=now)
         return data
 
 
