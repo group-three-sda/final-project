@@ -2,10 +2,10 @@ import datetime
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, View
 from django.shortcuts import render
-from .forms import RegistrationProfileForm, UpdateProfileForm, GoToForm
+from .forms import RegistrationProfileForm, UpdateProfileForm
 from .models import Profile
 from snapvisite.models import Appointment
-from .utils import generate_content, get_today
+
 
 
 class CreateProfileView(CreateView):
@@ -42,44 +42,3 @@ class CheckAppointmentsView(DetailView):
                                                                   time_slot__company_day__date__lt=now)
         return data
 
-
-class TimeTableView(View):
-    form_class = GoToForm
-    date_format = "%Y-%m-%d"
-
-    template_name = 'account/timetable.html'
-
-    def get(self, request, *args, **kwargs):
-        option = self.kwargs["option"]
-        on_screen_date = self.kwargs["data"]
-
-        if option == "actual":
-            context = generate_content(get_today())
-            return render(request, "account/timetable.html", context)
-
-        elif option == "previous":
-            date = datetime.datetime.strptime(on_screen_date, self.date_format)
-            previous_week = date - datetime.timedelta(days=7)
-            context = generate_content(previous_week)
-            return render(request, "account/timetable.html", context)
-
-        elif option == "next":
-            date = datetime.datetime.strptime(on_screen_date, self.date_format)
-            next_week = date + datetime.timedelta(days=7)
-            context = generate_content(next_week)
-            return render(request, "account/timetable.html", context)
-
-        else:
-            context = generate_content(get_today())
-            return render(request, "account/timetable.html", context)
-
-    def post(self, request, *args, **kwargs):
-        date_form = self.form_class(request.POST)
-        if date_form.is_valid():
-            searched_date = date_form.cleaned_data["searched_date"]
-            date = datetime.datetime.strptime(searched_date, self.date_format)
-            context = generate_content(date)
-            return render(request, "account/timetable.html", context)
-        else:
-            context = generate_content(get_today())
-            return render(request, "account/timetable.html", context)
