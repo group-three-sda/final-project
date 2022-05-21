@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from snapvisite.mixins import OwnerAccessMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -285,6 +285,25 @@ class CreateSingleTimeSlotView(CreateView):
         form.instance.company_day_id = self.kwargs['day_id']
         obj = form.save(commit=False)
         obj.save()
+        return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'pk': company_id}))
+
+
+class CreateMultipleTimeSlotView(FormView):
+    form_class = CompanyTimeSlotMultipleForm
+    template_name = 'snapvisite/company_editor.html'
+
+    def form_valid(self, form):
+        company_id = CompanyDay.objects.get(id=self.kwargs['day_id']).company_id
+        from_time = form.cleaned_data.get('from_time')
+        to_time = form.cleaned_data.get('to_time')
+        delta = datetime.timedelta(minutes=form.cleaned_data.get('delta'))
+        while from_time <= to_time:
+            instance = TimeSlot(
+                start_time=from_time,
+                company_day=CompanyDay.objects.get(id=self.kwargs['day_id'])
+            )
+            instance.save()
+            from_time = (datetime.datetime.combine(datetime.date(1, 1, 1), from_time) + delta).time()
         return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'pk': company_id}))
 
 

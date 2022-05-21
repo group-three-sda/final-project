@@ -98,9 +98,14 @@
             </div>
             {% endfor %}
             <br>
-            <a href="{% url 'snapvisite:single_timeslot' company_day.id %}">
-                <button type="button" class="btn btn-light btn-outline-success" style="width:100%">Create TimeSlot
-            </button></a>
+            <div class="dropdown">
+                <button style="width:100%" class="btn btn-success dropdown-toggle" type="button" id="dropdown{{ company_day.id }}" data-bs-toggle="dropdown" aria-expanded="false">Create TimeSlot
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdown{{ company_day.id }}">
+                    <li><a class="dropdown-item" href="{% url 'snapvisite:multiple_timeslot' company_day.id %}">Multiple</a></li>
+                    <li><a class="dropdown-item" href="{% url 'snapvisite:single_timeslot' company_day.id %}">Single</a></li>
+                </ul>
+            </div>
         </div>
     {% endfor %}
     </div>

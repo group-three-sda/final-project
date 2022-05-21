@@ -20,20 +20,3 @@ class UpdateProfileForm(forms.ModelForm):
             'phone_number': forms.TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'example:.. +48 123 456 789'}),
         }
-
-
-#class PasswordChangeCustomForm(PasswordChangeForm):
-#    error_css_class = 'has-error'
-#    error_messages = {'password_incorrect': "The old password is not correct. Try again."}
-#    old_password = forms.CharField(required=True, label='Password', widget=forms.PasswordInput(attrs={
-#                    'class': 'form-control'}),
-#                  error_messages={
-#                    'required': 'The password can not be empty'})
-#    new_password1 = forms.CharField(required=True, label='New password', widget=forms.PasswordInput(attrs={
-#                    'class': 'form-control'}),
-#                  error_messages={
-#                    'required': 'The password can not be empty'})
-#    new_password2 = forms.CharField(required=True, label='New password', widget=forms.PasswordInput(attrs={
-#                    'class': 'form-control'}),
-#                  error_messages={
-#                    'required': 'The password can not be empty'})
