@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView, FormView
 from django.views.generic.detail import SingleObjectMixin
-from snapvisite.mixins import OwnerAccessMixin
+from .mixins import OwnerAccessMixin, UserConfirmMixin
 
 from .forms import *
 from .models import *
@@ -240,9 +240,13 @@ class CompanyListSearchView(View):
             return render(request, 'snapvisite/company_list.html', {'company_list': company_list})
 
 
-class CompanyUserView(DetailView):
+class CompanyUserView(UserConfirmMixin, DetailView):
     model = Company
     template_name = "snapvisite/company_user_detail.html"
+
+    def test_func(self):
+        user = self.request.user
+        return user.confirm
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -364,9 +368,13 @@ class DeleteTimeSlotView(DeleteView):
         return reverse('snapvisite:company_terminal', kwargs={"pk": self.kwargs['company_id']})
 
 
-class UserTerminal(DetailView):
+class UserTerminal(UserConfirmMixin, DetailView):
     model = Company
     template_name = 'snapvisite/terminal_user.html'
+
+    def test_func(self):
+        user = self.request.user
+        return user.confirm
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data()
@@ -410,4 +418,3 @@ class SendMailToCompany(FormView):
         to_email = [Company.objects.get(id=self.kwargs["company_id"]).email, ]
         send_mail(subject, message, from_email, to_email)
         return HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))
-
