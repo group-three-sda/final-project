@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 
 
@@ -20,3 +20,9 @@ class UpdateProfileForm(forms.ModelForm):
             'phone_number': forms.TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'example:.. +48 123 456 789'}),
         }
+
+
+class ConfirmMailForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = {}

@@ -1,13 +1,16 @@
 import datetime
+
+from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView
-from django.http import HttpResponseRedirect
+from snapvisite.mixins import UserConfirmMixin
 from snapvisite.models import Appointment
-from .utils import mail
 
+from .forms import ConfirmMailForm
 from .forms import RegistrationProfileForm, UpdateProfileForm
 from .models import Profile
-from django.contrib.messages.views import SuccessMessageMixin
+from .utils import mail
 
 
 class CreateProfileView(SuccessMessageMixin, CreateView):
@@ -16,16 +19,19 @@ class CreateProfileView(SuccessMessageMixin, CreateView):
     success_message = 'Your account has been created successfully.'
 
     def form_valid(self, form):
-        username = form.cleaned_data['user_name']
-        email = form.cleaned_data['email']
-        mail(username, email)
         obj = form.save(commit=False)
         obj.save()
+        mail(obj.user_name, obj.email, obj.id)
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
 
 
-class DetailProfileView(DetailView):
+class DetailProfileView(UserConfirmMixin, DetailView):
     model = Profile
+
+    def test_func(self):
+        user = self.request.user
+        if user.confirm:
+            return True
 
 
 class UpdateProfileView(UpdateView):
@@ -51,3 +57,16 @@ class CheckAppointmentsView(DetailView):
         data['appointments_history'] = Appointment.objects.filter(user__id=self.kwargs["pk"],
                                                                   time_slot__company_day__date__lt=now)
         return data
+
+
+class ConfirmEmailView(UpdateView):
+    model = Profile
+    form_class = ConfirmMailForm
+    template_name = "account/mail_confirm.html"
+
+    def form_valid(self, form):
+        user_id = self.kwargs["pk"]
+        user = Profile.objects.get(id=user_id)
+        user.confirm = True
+        user.save()
+        return HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))

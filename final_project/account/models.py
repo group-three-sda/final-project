@@ -48,6 +48,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     phone_number = PhoneNumberField(blank=True, null=True)
+    confirm = models.BooleanField(default=False)
 
     objects = CustomAccountManager()
 
