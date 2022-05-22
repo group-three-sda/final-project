@@ -3,7 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView
 from django.http import HttpResponseRedirect
 from snapvisite.models import Appointment
-from .utils import send_mail
+from .utils import mail
 
 from .forms import RegistrationProfileForm, UpdateProfileForm
 from .models import Profile
@@ -18,7 +18,7 @@ class CreateProfileView(SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         username = form.cleaned_data['user_name']
         email = form.cleaned_data['email']
-        send_mail(username, email)
+        mail(username, email)
         obj = form.save(commit=False)
         obj.save()
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
