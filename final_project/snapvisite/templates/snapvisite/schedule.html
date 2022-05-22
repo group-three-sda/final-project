@@ -16,6 +16,7 @@
             <br>
             <button type="submit" class="btn btn-lg btn-outline-dark" name='submit' style="margin-bottom: 20px; width: 40%; font-size: 28px; background-color: white; color: black;"> Save </button>
                 {% csrf_token %}
+                {{ form.errors }}
             </form>
         </div>
     </div>
