@@ -1,10 +1,7 @@
 import datetime
-
 from django.urls import reverse, reverse_lazy
-
 from django.views.generic import CreateView, DetailView, UpdateView
 from snapvisite.models import Appointment
-
 from .forms import RegistrationProfileForm, UpdateProfileForm
 from .models import Profile
 from django.contrib.messages.views import SuccessMessageMixin
