@@ -124,7 +124,7 @@ This is list of software that you need to run SnapVisite project and how to inst
 
 
 
-<!-- USAGE EXAMPLES -->
+<!-- USAGE -->
 ## Usage
 
 The "SnapVisit" service is designed to make it easier for service providers to connect with their customers by speeding up the appointment booking and payment process. The service provider will be able to register their business, set services and their price list, create a calendar to manage appointments. The customer will have the freedom to choose appointments with the selected service provider based on their needs.
@@ -134,7 +134,7 @@ The "SnapVisit" service is designed to make it easier for service providers to c
 
 
 
-<!-- ROADMAP -->
+<!-- FEATURES -->
 ## Features
 
 - [ ] Registration of new service providers
