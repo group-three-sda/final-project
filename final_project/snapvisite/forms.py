@@ -86,7 +86,6 @@ class ScheduleDayForm(forms.ModelForm):
     close_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
 
 
-
 ScheduleInlineFormset = inlineformset_factory(
     Company,
     Schedule,
@@ -148,7 +147,6 @@ class CompanyDayMultipleForm(forms.Form):
                                         }))
 
 
-
 class CompanyTimeSlotForm(forms.ModelForm):
     class Meta:
         model = TimeSlot
@@ -158,9 +156,9 @@ class CompanyTimeSlotForm(forms.ModelForm):
 
 
 class CompanyTimeSlotMultipleForm(forms.Form):
-    from_time = forms.TimeField(label="Start Time", widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
-    to_time = forms.TimeField(label="End Time", widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
-    delta = forms.IntegerField(label="Time step(in minutes)",
+    from_time = forms.TimeField(required=True, label="Start Time", widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+    to_time = forms.TimeField(required=True, label="End Time", widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+    delta = forms.IntegerField(required=True, label="Time step(in minutes)",
                                widget=forms.NumberInput(attrs={
                                    'class': 'form-control form-control-lg',
                                    'placeholder': 'Enter minutes. What step to create a new slot.'
