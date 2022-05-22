@@ -113,7 +113,7 @@ This is list of software that you need to run SnapVisite project and how to inst
    ```
 3. Make your secret key in settings.py     
    ```js
-   In manage.py folder create .env file.
+   In the folder containing the manage.py file, create an .env file.
    
    Add to .env file variables used in settings.py config: 
        SECRET_KEY = example_name
