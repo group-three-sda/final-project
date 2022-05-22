@@ -256,7 +256,7 @@ class CreateCompanyDay(UserPassesTestMixin, CreateView):
     pk_url_kwarg = 'company_id'
     model = CompanyDay
     form_class = CompanyDayForm
-    template_name = "snapvisite/create_company_day.html"
+    template_name = 'snapvisite/company_editor.html'
 
     def test_func(self):
         obj = self.get_object(Company.objects.all())
@@ -267,6 +267,37 @@ class CreateCompanyDay(UserPassesTestMixin, CreateView):
         obj = form.save(commit=False)
         obj.save()
         return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={"pk": form.instance.company_id}))
+
+
+class CreateMultipleCompanyDayView(FormView):
+    pk_url_kwarg = 'company_id'
+    form_class = CompanyDayMultipleForm
+    template_name = 'snapvisite/company_editor.html'
+
+    def form_valid(self, form):
+        company = Company.objects.get(id=self.kwargs['company_id'])
+        now = datetime.datetime.today().date()
+        number_of_days = form.cleaned_data.get('number_of_days')
+        if company.companyday_set.exists():
+            last_created_date = CompanyDay.objects.filter(company=company).order_by('-date').first().date
+            last_created_date += datetime.timedelta(days=1)
+            for _ in range(number_of_days):
+                instance = CompanyDay(
+                    date=last_created_date,
+                    company=company
+                )
+                instance.save()
+                last_created_date += datetime.timedelta(days=1)
+        else:
+            for _ in range(number_of_days):
+                instance = CompanyDay(
+                    date=now,
+                    company=company
+                )
+                instance.save()
+                now += datetime.timedelta(days=1)
+
+        return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={"pk": self.kwargs['company_id']}))
 
 
 class DeleteCompanyDayView(DeleteView):

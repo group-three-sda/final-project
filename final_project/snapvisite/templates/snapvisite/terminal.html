@@ -18,7 +18,10 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'snapvisite:create_company_day' object.id %}">CompanyDay</a>
+                <a class="nav-link" href="{% url 'snapvisite:multiple_company_day' object.id %}">Open your worktime</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'snapvisite:create_company_day' object.id %}">Open single day</a>
               </li>
             </ul>
         </div>

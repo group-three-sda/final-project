@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/group-three-sda/final-project">
-    <img src="final_project/static/snapvisite/images/logo_color.png" alt="Logo" width="80" height="10">
+    <img src="final_project/static/snapvisite/images/logo_color.png" alt="Logo" width="80" height="20">
   </a>
 
 <h3 align="center">SnapVisite</h3>
@@ -33,11 +33,10 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#features">Features</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    
   </ol>
 </details>
 
@@ -98,6 +97,10 @@ This is list of software that you need to run SnapVisite project and how to inst
    ```
 2. Install python packages using terminal with command:
    ```sh
+   Easy method:
+   pip install -r requirements.txt
+   
+   Detailed method:
    pip install python-decouple
    
    python3 -m pip install --upgrade Pillow
@@ -110,23 +113,18 @@ This is list of software that you need to run SnapVisite project and how to inst
    ```
 3. Make your secret key in settings.py     
    ```js
-   In settings.py set:
-       SECRET_KEY = config('SECRET_KEY')
-   
-       DEBUG = config('DEBUG', cast=bool, default=True)
-   
-   In manage.py folder create .env file.
+   In final-project folder create .env file.
    
    Add to .env file variables used in settings.py config: 
        SECRET_KEY = example_name
-       DEBUG = True
+       DEBUG = False
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
-<!-- USAGE EXAMPLES -->
+<!-- USAGE -->
 ## Usage
 
 The "SnapVisit" service is designed to make it easier for service providers to connect with their customers by speeding up the appointment booking and payment process. The service provider will be able to register their business, set services and their price list, create a calendar to manage appointments. The customer will have the freedom to choose appointments with the selected service provider based on their needs.
@@ -136,8 +134,8 @@ The "SnapVisit" service is designed to make it easier for service providers to c
 
 
 
-<!-- ROADMAP -->
-## FEATURES
+<!-- FEATURES -->
+## Features
 
 - [ ] Registration of new service providers
 - - [ ] Accepting registered service providers
@@ -185,18 +183,6 @@ Project Link: [https://github.com/group-three-sda/final-project](https://github.
 
 
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
+
+
+

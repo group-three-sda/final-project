@@ -1,5 +1,4 @@
 import datetime
-
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView
 from django.http import HttpResponseRedirect
