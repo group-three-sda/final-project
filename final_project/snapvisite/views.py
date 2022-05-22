@@ -1,12 +1,15 @@
 import datetime
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from snapvisite.mixins import OwnerAccessMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
 
 from .forms import *
 from .models import *
@@ -50,33 +53,36 @@ class YourCompanyView(OwnerAccessMixin, DetailView):
     template_name = "snapvisite/your_company.html"
 
 
-class EditCompanyNameView(OwnerAccessMixin, UpdateView):
+class EditCompanyNameView(OwnerAccessMixin, SuccessMessageMixin, UpdateView):
     """ EDITOR """
     model = Company
     form_class = UpdateCompanyNameForm
     template_name = "snapvisite/company_editor.html"
+    success_message = 'Company name chenged successfully'
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
         return reverse("snapvisite:your_company", kwargs={"pk": pk})
 
 
-class EditCompanyPhotoView(OwnerAccessMixin, UpdateView):
+class EditCompanyPhotoView(OwnerAccessMixin, SuccessMessageMixin, UpdateView):
     """ EDITOR """
     model = Company
     form_class = UpdateCompanyPhotoForm
     template_name = "snapvisite/company_editor.html"
+    success_message = 'Company picture added successfully'
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
         return reverse("snapvisite:your_company", kwargs={"pk": pk})
 
 
-class EditCompanyDescriptionView(OwnerAccessMixin, UpdateView):
+class EditCompanyDescriptionView(OwnerAccessMixin, SuccessMessageMixin, UpdateView):
     """ EDITOR """
     model = Company
     form_class = UpdateCompanyDescriptionForm
     template_name = "snapvisite/company_editor.html"
+    success_message = 'Company description added successfully.'
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -97,12 +103,13 @@ class EditCompanyCategoriesView(OwnerAccessMixin, UpdateView):
         return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": id_company}))
 
 
-class CreateAddressView(UserPassesTestMixin, CreateView):
+class CreateAddressView(UserPassesTestMixin, SuccessMessageMixin, CreateView):
     pk_url_kwarg = 'company_id'
     """ EDITOR """
     model = Address
     form_class = AddressForm
     template_name = 'snapvisite/address.html'
+    success_message = 'Company address added successfully.'
 
     def form_valid(self, form, *args, **kwargs):
         form.instance.company_id = self.kwargs['company_id']
@@ -115,11 +122,12 @@ class CreateAddressView(UserPassesTestMixin, CreateView):
         return obj.owner == self.request.user
 
 
-class UpdateAddressView(UserPassesTestMixin, UpdateView):
+class UpdateAddressView(UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     """ EDITOR """
     model = Address
     form_class = AddressForm
     template_name = 'snapvisite/address.html'
+    success_message = 'Company address updated successfully.'
 
     def get_success_url(self):
         company_id = self.kwargs['company_id']
@@ -165,11 +173,12 @@ class CreateServiceView(UserPassesTestMixin, CreateView):
         return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": form.instance.company_id}))
 
 
-class UpdateServiceView(UserPassesTestMixin, UpdateView):
+class UpdateServiceView(UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     """ EDITOR """
     model = Service
     form_class = ServiceForm
     template_name = 'snapvisite/company_editor.html'
+    success_message = 'Company service updated successfully.'
 
     def get_success_url(self):
         company_id = self.kwargs['company_id']
@@ -180,11 +189,23 @@ class UpdateServiceView(UserPassesTestMixin, UpdateView):
         return obj.company.owner == self.request.user
 
 
-class DeleteServiceView(DeleteView):
+class DeleteServiceView(SuccessMessageMixin, DeleteView):
     model = Service
+    success_message = 'Company service deleted successfully.'
 
     def get_success_url(self):
         return reverse('snapvisite:your_company', kwargs={"pk": self.kwargs['company_id']})
+
+
+class UpdateContactView(UpdateView):
+    """ EDITOR """
+    model = Company
+    form_class = ContactForm
+    template_name = "snapvisite/company_editor.html"
+
+    def get_success_url(self):
+        pk = self.kwargs['pk']
+        return reverse('snapvisite:your_company', kwargs={"pk": pk})
 
 
 class CompanyListSearchView(View):
@@ -203,14 +224,16 @@ class CompanyListSearchView(View):
         if category_id != all_categories_id:
             if request.POST['city']:
                 searched_city = request.POST['city']
-                company_list = Company.objects.filter(category__id=category_id, address__city__icontains=searched_city)
+                company_list = Company.objects.filter(
+                    category__id=category_id, address__city__icontains=searched_city)
             else:
                 company_list = Company.objects.filter(category__id=category_id)
             return render(request, 'snapvisite/company_list.html', {'company_list': company_list})
         else:
             if request.POST['city']:
                 searched_city = request.POST['city']
-                company_list = Company.objects.filter(address__city__icontains=searched_city)
+                company_list = Company.objects.filter(
+                    address__city__icontains=searched_city)
             else:
                 company_list = Company.objects.all()
             return render(request, 'snapvisite/company_list.html', {'company_list': company_list})
@@ -224,7 +247,8 @@ class CompanyUserView(DetailView):
         data = super().get_context_data(**kwargs)
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
-        data["days_list"] = CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now)
+        data["days_list"] = CompanyDay.objects.filter(
+            company__id=self.kwargs["pk"], date__gte=now)
         return data
 
 
@@ -260,7 +284,8 @@ class CompanyTerminalView(OwnerAccessMixin, DetailView):
         data = super().get_context_data()
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
-        data['days'] = CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now)
+        page = self.request.GET.get('page')
+        data['days'] = Paginator(CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now), 7).get_page(page)
         return data
 
 
@@ -270,10 +295,32 @@ class CreateSingleTimeSlotView(CreateView):
     form_class = CompanyTimeSlotForm
 
     def form_valid(self, form):
-        company_id = CompanyDay.objects.get(id=self.kwargs['day_id']).company_id
+        company_id = CompanyDay.objects.get(
+            id=self.kwargs['day_id']).company_id
         form.instance.company_day_id = self.kwargs['day_id']
         obj = form.save(commit=False)
         obj.save()
+        return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'pk': company_id}))
+
+
+class CreateMultipleTimeSlotView(FormView):
+    form_class = CompanyTimeSlotMultipleForm
+    template_name = 'snapvisite/company_editor.html'
+
+    def form_valid(self, form):
+        company_id = CompanyDay.objects.get(
+            id=self.kwargs['day_id']).company_id
+        from_time = form.cleaned_data.get('from_time')
+        to_time = form.cleaned_data.get('to_time')
+        delta = datetime.timedelta(minutes=form.cleaned_data.get('delta'))
+        while from_time <= to_time:
+            instance = TimeSlot(
+                start_time=from_time,
+                company_day=CompanyDay.objects.get(id=self.kwargs['day_id'])
+            )
+            instance.save()
+            from_time = (datetime.datetime.combine(
+                datetime.date(1, 1, 1), from_time) + delta).time()
         return HttpResponseRedirect(reverse('snapvisite:company_terminal', kwargs={'pk': company_id}))
 
 
@@ -292,7 +339,10 @@ class UserTerminal(DetailView):
         data = super().get_context_data()
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
-        data["days"] = CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now)
+        page = self.request.GET.get('page')
+        data['days'] = Paginator(CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now), 7).get_page(
+            page)
+
         data["service_id"] = self.kwargs["service_id"]
         return data
 
@@ -307,7 +357,8 @@ class CreateAppointmentView(CreateView):
         form.instance.service_id = self.kwargs["service_id"]
         form.instance.time_slot_id = self.kwargs["timeslot_id"]
         obj = form.save(commit=False)
-        form.instance.appointment_code = Appointment.create_appointment_code(obj)
+        form.instance.appointment_code = Appointment.create_appointment_code(
+            obj)
         obj.save()
         status_change = TimeSlot.objects.get(id=self.kwargs["timeslot_id"])
         status_change.status = False

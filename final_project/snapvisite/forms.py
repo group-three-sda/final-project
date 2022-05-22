@@ -81,9 +81,10 @@ class ScheduleDayForm(forms.ModelForm):
     class Meta:
         model = Schedule
         fields = ('day_of_week', 'open_time', 'close_time')
+        
+    open_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+    close_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
 
-    open_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
-    close_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
 
 
 ScheduleInlineFormset = inlineformset_factory(
@@ -112,6 +113,15 @@ class ServiceForm(forms.ModelForm):
                                                                'step': 1}))
 
 
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ('phone_number', 'email')
+
+    phone_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
+
+
 class CompanyDayForm(forms.ModelForm):
     class Meta:
         model = CompanyDay
@@ -130,7 +140,26 @@ class CompanyTimeSlotForm(forms.ModelForm):
         model = TimeSlot
         fields = ('start_time',)
 
-    start_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'timepicker'}))
+    start_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+
+
+class CompanyTimeSlotMultipleForm(forms.Form):
+    from_time = forms.TimeField(label="Start Time", widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+    to_time = forms.TimeField(label="End Time", widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+    delta = forms.IntegerField(label="Time step(in minutes)",
+                               widget=forms.NumberInput(attrs={
+                                   'class': 'form-control form-control-lg',
+                                   'placeholder': 'Enter minutes. What step to create a new slot.'
+                               }))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        from_time = cleaned_data.get("from_time")
+        to_time = cleaned_data.get("to_time")
+
+        if from_time > to_time:
+            raise ValidationError({"to_time": "Start time have to be lower than end time"})
+
 
 
 class CreateAppointmentForm(forms.ModelForm):
