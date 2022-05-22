@@ -1,7 +1,10 @@
 import datetime
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView
+from django.http import HttpResponseRedirect
 from snapvisite.models import Appointment
+from .utils import send_mail
+
 from .forms import RegistrationProfileForm, UpdateProfileForm
 from .models import Profile
 from django.contrib.messages.views import SuccessMessageMixin
@@ -10,8 +13,15 @@ from django.contrib.messages.views import SuccessMessageMixin
 class CreateProfileView(SuccessMessageMixin, CreateView):
     form_class = RegistrationProfileForm
     template_name = 'account/registration_form.html'
-    success_url = reverse_lazy('snapvisite:home-page')
     success_message = 'Your account has been created successfully.'
+
+    def form_valid(self, form):
+        username = form.cleaned_data['user_name']
+        email = form.cleaned_data['email']
+        send_mail(username, email)
+        obj = form.save(commit=False)
+        obj.save()
+        return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
 
 
 class DetailProfileView(DetailView):
