@@ -67,10 +67,10 @@
     <br>
     {% for service in object.service_set.all %}
     <div class="row shadow-sm bg-light" style="padding-left: 30px; max-height: 100px;">
-        <div class="col-3"><p class="float-start" style="font-size:32px;">{{ service.name }}</p></div>
+        <div class="col-3"><p class="text-center" style="font-size:32px;">{{ service.name }}</p></div>
         <div class="col-3"><p class="text-center" style="font-size:18px;">{{ service.description }}</p></div>
-        <div class="col-2"><p class="float-start" style="font-size:28px;">{{ service.price }}.- </p></div>
-        <div class="col-2"><p class="float-start" style="font-size:28px;">{{ service.time|duration_format }}</p></div>
+        <div class="col-2"><p class="text-center" style="font-size:28px;">{{ service.price }}.- </p></div>
+        <div class="col-2"><p class="text-center" style="font-size:28px;">{{ service.time|duration_format }}</p></div>
         <div class="col-2"><a href="{% url 'snapvisite:service_edit' service.id service.company.id %}"><button type="button" class="btn btn-outline-dark btn-lg">
         Edit</button></a>
         <a href="{% url 'snapvisite:delete_service' service.id object.id %}"><button type="button" class="btn btn-danger btn-lg" aria-label="Close">Delete</button></a>

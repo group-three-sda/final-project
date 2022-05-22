@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from .models import Company, Address
 
+
 class UserAccountTests(TestCase):
     def test_new_superuser(self):
 
@@ -48,6 +49,7 @@ class BaseModelTestCase(TestCase):
         cls.company.save()
         cls.company_address = Address(company=cls.company, name="Strzegom")
         cls.company_address.save()
+
 
 class CompanyModelTestCase(BaseModelTestCase):
 
