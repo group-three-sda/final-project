@@ -5,7 +5,7 @@ from django.shortcuts import render
 from .forms import RegistrationProfileForm, UpdateProfileForm, GoToForm
 from .models import Profile
 from snapvisite.models import Appointment
-from .utils import generate_content, get_today
+
 
 
 class CreateProfileView(CreateView):
