@@ -135,6 +135,20 @@ class CompanyDayForm(forms.ModelForm):
     date = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}))
 
 
+help_text_n_days = "If u never create workday before these will be created from today date." \
+                   " Otherwise from last created date"
+
+
+class CompanyDayMultipleForm(forms.Form):
+    number_of_days = forms.IntegerField(label="How many days into the future you want to create.",
+                                        help_text=help_text_n_days,
+                                        widget=forms.NumberInput(attrs={
+                                            'class': 'form-control',
+                                            'placeholder': 'Enter in example: 30 to make workdays for month.'
+                                        }))
+
+
+
 class CompanyTimeSlotForm(forms.ModelForm):
     class Meta:
         model = TimeSlot
@@ -161,7 +175,6 @@ class CompanyTimeSlotMultipleForm(forms.Form):
             raise ValidationError({"to_time": "Start time have to be lower than end time"})
 
 
-
 class CreateAppointmentForm(forms.ModelForm):
     CHOICES = [(True, 'Pay with card now.'), (False, 'Pay by cash on visit.')]
 
@@ -171,4 +184,5 @@ class CreateAppointmentForm(forms.ModelForm):
 
     note = forms.CharField(label='Additional information', widget=forms.Textarea(
         attrs={'class': 'form-control form-control-lg', 'rows': 3}))
-    payment_status = forms.ChoiceField(label='Payment option', widget=forms.RadioSelect, choices=CHOICES)
+    payment_status = forms.ChoiceField(label='Payment option',
+                                       widget=forms.RadioSelect(attrs={'class': 'form-check'}), choices=CHOICES)
