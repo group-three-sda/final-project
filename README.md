@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/group-three-sda/final-project">
-    <img src="final_project/static/snapvisite/images/logo_color.png" alt="Logo" width="80" height="10">
+    <img src="final_project/static/snapvisite/images/logo_color.png" alt="Logo" width="80" height="20">
   </a>
 
 <h3 align="center">SnapVisite</h3>
@@ -33,11 +33,10 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#features">Features</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    
   </ol>
 </details>
 
@@ -98,6 +97,10 @@ This is list of software that you need to run SnapVisite project and how to inst
    ```
 2. Install python packages using terminal with command:
    ```sh
+   Easy method:
+   pip install -r requirements.txt
+   
+   Detailed method:
    pip install python-decouple
    
    python3 -m pip install --upgrade Pillow
@@ -110,16 +113,11 @@ This is list of software that you need to run SnapVisite project and how to inst
    ```
 3. Make your secret key in settings.py     
    ```js
-   In settings.py set:
-       SECRET_KEY = config('SECRET_KEY')
-   
-       DEBUG = config('DEBUG', cast=bool, default=True)
-   
    In manage.py folder create .env file.
    
    Add to .env file variables used in settings.py config: 
        SECRET_KEY = example_name
-       DEBUG = True
+       DEBUG = False
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -137,7 +135,7 @@ The "SnapVisit" service is designed to make it easier for service providers to c
 
 
 <!-- ROADMAP -->
-## FEATURES
+## Features
 
 - [ ] Registration of new service providers
 - - [ ] Accepting registered service providers
