@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -316,7 +317,8 @@ class CompanyTerminalView(OwnerAccessMixin, DetailView):
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
         page = self.request.GET.get('page')
-        data['days'] = Paginator(CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now), 7).get_page(page)
+        data['days'] = Paginator(CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now), 7).get_page(
+            page)
         return data
 
 
@@ -395,3 +397,17 @@ class CreateAppointmentView(CreateView):
         status_change.status = False
         status_change.save()
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
+
+
+class SendMailToCompany(FormView):
+    form_class = SendMailForm
+    template_name = 'snapvisite/send_mail.html'
+
+    def form_valid(self, form):
+        subject = form.cleaned_data["subject"]
+        message = form.cleaned_data["message"]
+        from_email = self.request.user.email
+        to_email = [Company.objects.get(id=self.kwargs["company_id"]).email, ]
+        send_mail(subject, message, from_email, to_email)
+        return HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))
+
