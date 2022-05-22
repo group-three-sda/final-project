@@ -184,3 +184,9 @@ class CreateAppointmentForm(forms.ModelForm):
         attrs={'class': 'form-control form-control-lg', 'rows': 3}))
     payment_status = forms.ChoiceField(label='Payment option',
                                        widget=forms.RadioSelect(attrs={'class': 'form-check'}), choices=CHOICES)
+
+
+class SendMailForm(forms.Form):
+    subject = forms.CharField(required=True, label="Subject", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    message = forms.CharField(required=True, label="Message", widget=forms.Textarea(attrs={'class': 'form-control'}))
+

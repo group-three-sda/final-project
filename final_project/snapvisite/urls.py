@@ -39,4 +39,5 @@ urlpatterns = [
          name='delete_timeslot'),
     path('snapvisite/terminal/delete-service/<int:pk>/<int:company_id>/', DeleteServiceView.as_view(),
          name='delete_service'),
+    path('snapvisite/company/send-mail/<int:company_id>/', SendMailToCompany.as_view(), name='send_mail'),
 ]
