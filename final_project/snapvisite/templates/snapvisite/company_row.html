@@ -27,7 +27,11 @@
             <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
             </svg> Open hours: </p>
             {% for schedule in company.schedule_set.all %}
-            <p style="font-size:16px"> <strong>{{ schedule.day_of_week }}</strong> {{ schedule.open_time|time:"H:i"}}-{{ schedule.close_time|time:"H:i" }} </p>
+            {% if schedule.open_time and schedule.close_time %}
+            <p> <strong>{{ schedule.day_of_week }}</strong> {{ schedule.open_time|time:"H:i"}}-{{ schedule.close_time|time:"H:i" }} </p>
+            {% else %}
+            <p> <strong>{{ schedule.day_of_week }}</strong> Closed </p>
+            {% endif %}
             {% endfor %}
         </div>
         <div class="col-3 pt-3">
