@@ -103,26 +103,3 @@ def test_edit_company_name_form(
         }
     )
     assert form.is_valid() is validity
-
-
-@pytest.mark.parametrize(
-    "day_of_week, open_time, close_time, validity",
-    [
-        ("Monday", datetime.time(hour=9, minute=30), datetime.time(hour=11, minute=30),  True),
-        ("Monday", datetime.time(hour=9, minute=30), datetime.time(hour=11, minute=30),  True),
-        ("blabla", datetime.time(hour=9, minute=30), datetime.time(hour=11, minute=30),  False),
-        ("Tuesday", datetime.time(hour=9, minute=30), datetime.time(hour=8, minute=30),  False)
-    ],
-)
-@pytest.mark.django_db
-def test_schedule_form(
-        day_of_week, open_time, close_time, validity, new_company,
-):
-    form = ScheduleDayForm(
-        data={
-            "day_of_week": day_of_week,
-            "open_time": open_time,
-            "close_time": close_time,
-        }
-    )
-    assert form.is_valid() is validity
