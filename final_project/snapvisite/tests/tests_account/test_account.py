@@ -7,11 +7,6 @@ def test_new_user(new_user):
     assert new_user.user_name == 'nickname'
 
 
-@pytest.mark.django_db
-def test_user_amount_0():
-    assert profile.objects.count() == 0
-
-
 def test_new_super_user(new_super_user):
     assert new_super_user.email == 'superuser@test.com'
 

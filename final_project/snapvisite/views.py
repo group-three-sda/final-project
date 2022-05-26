@@ -144,6 +144,7 @@ class UpdateAddressView(UserPassesTestMixin, SuccessMessageMixin, UpdateView):
 
 class ScheduleView(extra_views.ModelFormSetView):
     template_name = 'snapvisite/schedule.html'
+    pk_url_kwarg = 'company_id'
     model = Schedule
     factory_kwargs = {
         "form": ScheduleDayForm,
@@ -161,8 +162,8 @@ class ScheduleView(extra_views.ModelFormSetView):
 
 
 class CreateServiceView(UserPassesTestMixin, CreateView):
-    pk_url_kwarg = 'company_id'
     """ EDITOR """
+    pk_url_kwarg = 'company_id'
     form_class = ServiceForm
     template_name = 'snapvisite/company_editor.html'
 

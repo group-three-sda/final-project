@@ -12,11 +12,6 @@ profile = get_user_model()
 fake = Faker()
 
 
-def test_factory(category_factory):
-    category = category_factory.build()
-    assert category.category_name == 'category'
-
-
 @pytest.mark.parametrize(
     "company_name, category, validity",
     [

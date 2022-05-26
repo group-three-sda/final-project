@@ -1,6 +1,7 @@
 import pytest
 from pytest_factoryboy import register
-from snapvisite.tests.factories import UserFactory, SuperUserFactory, CategoryFactory, CompanyFactory
+from snapvisite.tests.factories.factories_user import UserFactory, SuperUserFactory
+from snapvisite.tests.factories.factories_snapvisite import CategoryFactory, CompanyFactory
 from django.contrib.auth import get_user_model
 profile = get_user_model()
 
