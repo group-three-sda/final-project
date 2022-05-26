@@ -1,7 +1,9 @@
+import datetime
+
 from django import forms
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.core.exceptions import ValidationError
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, formset_factory
 
 from .models import Company, Category, Address, Schedule, Service, CompanyDay, TimeSlot, Appointment
 
@@ -81,19 +83,17 @@ class ScheduleDayForm(forms.ModelForm):
     class Meta:
         model = Schedule
         fields = ('day_of_week', 'open_time', 'close_time')
-        
-    open_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
-    close_time = forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+    day_of_week = (forms.CharField(disabled=True, widget=forms.TextInput(attrs={'class': 'form-control'})))
+    open_time = forms.TimeField(required=False, widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
+    close_time = forms.TimeField(required=False, widget=forms.TimeInput(attrs={'class': 'form-control timepicker'}))
 
-
-ScheduleInlineFormset = inlineformset_factory(
-    Company,
-    Schedule,
-    form=ScheduleDayForm,
-    extra=7,
-    max_num=7,
-    can_delete=True,
-)
+    def clean(self):
+        cleaned_data = super().clean()
+        open_time = cleaned_data.get("open_time")
+        close_time = cleaned_data.get("close_time")
+        if isinstance(open_time, datetime.time):
+            if open_time > close_time:
+                raise ValidationError({"open_time": "Start time have to be lower than end time"})
 
 
 class ServiceForm(forms.ModelForm):
@@ -134,11 +134,10 @@ class CompanyDayForm(forms.ModelForm):
     date = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}))
 
 
-help_text_n_days = "If u never create workday before these will be created from today date." \
-                   " Otherwise from last created date"
-
-
 class CompanyDayMultipleForm(forms.Form):
+    help_text_n_days = "If u never create workday before these will be created from today date." \
+                       " Otherwise from last created date"
+
     number_of_days = forms.IntegerField(label="How many days into the future you want to create.",
                                         help_text=help_text_n_days,
                                         widget=forms.NumberInput(attrs={

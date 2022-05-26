@@ -1,6 +1,8 @@
 import datetime
 
+import extra_views
 from django.core.mail import send_mail
+from extra_views import FormSetView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -95,6 +97,7 @@ class EditCompanyCategoriesView(OwnerAccessMixin, UpdateView):
     model = Company
     form_class = EditCategoriesForm
     template_name = "snapvisite/company_editor.html"
+    success_message = 'Company categories updated successfully.'
 
     def form_valid(self, form, *args, **kwargs):
         form.save(commit=False)
@@ -139,27 +142,28 @@ class UpdateAddressView(UserPassesTestMixin, SuccessMessageMixin, UpdateView):
         return obj.company.owner == self.request.user
 
 
-class ScheduleView(SingleObjectMixin, OwnerAccessMixin, View):
+class ScheduleView(extra_views.ModelFormSetView):
+    template_name = 'snapvisite/schedule.html'
     pk_url_kwarg = 'company_id'
-    queryset = Company.objects.all()
-    """ EDITOR """
+    model = Schedule
+    factory_kwargs = {
+        "form": ScheduleDayForm,
+        "extra": len(Schedule.DAYS),
+        "max_num": 7,
+        "can_delete": False}
+    initial = [{'day_of_week': Schedule.DAYS[x][0]} for x in range(len(Schedule.DAYS))]
 
-    def get(self, request, company_id):
-        company = Company.objects.get(pk=company_id)
-        formset = ScheduleInlineFormset(instance=company)
-        return render(request, 'snapvisite/schedule.html', {'formset': formset})
-
-    def post(self, request, company_id, **kwargs):
-        company = Company.objects.get(pk=company_id)
-        formset = ScheduleInlineFormset(request.POST, instance=company)
-        if formset.is_valid():
-            formset.save()
-            return redirect('snapvisite:your_company', pk=company.id)
+    def formset_valid(self, formset):
+        for form in formset:
+            form.instance.company_id = self.kwargs['company_id']
+            obj = form.save(commit=False)
+            obj.save()
+        return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": self.kwargs['company_id']}))
 
 
 class CreateServiceView(UserPassesTestMixin, CreateView):
-    pk_url_kwarg = 'company_id'
     """ EDITOR """
+    pk_url_kwarg = 'company_id'
     form_class = ServiceForm
     template_name = 'snapvisite/company_editor.html'
 

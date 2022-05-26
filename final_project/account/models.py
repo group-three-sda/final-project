@@ -8,6 +8,7 @@ class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, user_name, password, **other_fields):
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
+        other_fields.setdefault('confirm', True)
         if other_fields.get('is_staff') is not True:
             raise ValueError(
                 'Superuser must be assigned to is_staff=True.'

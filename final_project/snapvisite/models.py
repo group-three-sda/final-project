@@ -42,7 +42,7 @@ class Company(models.Model):
 
 class Address(models.Model):
     city = models.CharField(max_length=50)
-    postal_code = models.CharField(max_length=6)
+    postal_code = models.CharField(max_length=8)
     street_name = models.CharField(max_length=50)
     street_number = models.CharField(max_length=50)
     apartment_number = models.CharField(max_length=5, blank=True, null=True)
@@ -74,8 +74,8 @@ class Schedule(models.Model):
     DAYS = (('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
             ('Friday', 'Friday'), ('Saturday', 'Saturday'), ('Sunday', 'Sunday'))
     day_of_week = models.CharField(max_length=50, choices=DAYS, null=True, blank=True)
-    open_time = models.TimeField(null=True, blank=True)
-    close_time = models.TimeField(null=True, blank=True)
+    open_time = models.TimeField(null=True, blank=True, default=None)
+    close_time = models.TimeField(null=True, blank=True, default=None)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
