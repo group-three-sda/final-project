@@ -2,4 +2,5 @@ django==4.0.4
 Pillow==9.1.0
 python-decouple~=3.6
 django-phonenumber-field~=6.1.0
-phonenumbers==8.12.47
+phonenumbers==8.12.47phonenumbers==8.12.47
+django-extra-views==0.14.0
