@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-def mail(username, user_email, user_id):
+def account_confirmation_mail(username, user_email, user_id):
     confirmation_url = f"http://127.0.0.1:8000/account/mail-confirmation/{user_id}/"
     subject = "Thanks for open account in our service."
     message = f"\

@@ -1,20 +1,19 @@
+import extra_views
 import datetime
 
-import extra_views
-from django.core.mail import send_mail
-from extra_views import FormSetView
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView, FormView
-from django.views.generic.detail import SingleObjectMixin
-from .mixins import OwnerAccessMixin, UserConfirmMixin
 
 from .forms import *
+from .mixins import OwnerAccessMixin, UserConfirmMixin
 from .models import *
 
 
@@ -22,7 +21,7 @@ class MainPageView(TemplateView):
     template_name = "snapvisite/main_page.html"
 
 
-class CreateCompanyFirstStepView(LoginRequiredMixin, CreateView):
+class CreateCompanyFirstStepView(LoginRequiredMixin, UserConfirmMixin, CreateView):
     """
     First step to create a company.
     Current logged user can name and select categories for his company.
@@ -30,6 +29,11 @@ class CreateCompanyFirstStepView(LoginRequiredMixin, CreateView):
     model = Company
     form_class = CreateCompanyFirstStepForm
     template_name = 'snapvisite/create_company_first_step.html'
+
+    def test_func(self):
+        user = self.request.user
+        if user.confirm:
+            return True
 
     def form_valid(self, form):
         """
@@ -393,6 +397,7 @@ class UserTerminal(UserConfirmMixin, DetailView):
 
 
 class CreateAppointmentView(CreateView):
+    today = datetime.datetime.now().date().strftime("%d-%m-%Y")
     model = Appointment
     form_class = CreateAppointmentForm
     template_name = "snapvisite/appointment.html"
@@ -405,9 +410,25 @@ class CreateAppointmentView(CreateView):
         form.instance.appointment_code = Appointment.create_appointment_code(
             obj)
         obj.save()
-        status_change = TimeSlot.objects.get(id=self.kwargs["timeslot_id"])
-        status_change.status = False
-        status_change.save()
+        user_timeslot = TimeSlot.objects.get(id=self.kwargs["timeslot_id"])
+        user_timeslot.status = False
+        user_timeslot.save()
+        # sending mail about reservation on user email address.
+        user_appointment = Appointment.objects.get(time_slot=user_timeslot)
+        subject = f"Your new reservation from {self.today}"
+        message = f"\
+        Hello {self.request.user.first_name}!\n\
+        You received that mail from reason of new reservation in our service.\n\
+        You snap visit:\n\
+        On {user_timeslot.company_day.date} at {user_timeslot.start_time}.\n\
+        For {user_appointment.service.name} in {user_timeslot.company_day.company.company_name}.\n\
+        With additional information for employees:\n\
+        {user_appointment.note}\n\
+        Please arrive on time.\n\
+        Thank you for using our service!"
+        from_email = settings.EMAIL_HOST_USER
+        to_email = [self.request.user.email, ]
+        send_mail(subject, message, from_email, to_email)
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
 
 
