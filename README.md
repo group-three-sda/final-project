@@ -59,7 +59,6 @@ The site allows the service provider to show available appointments and individu
 * [python-decouple](https://pypi.org/project/python-decouple/)
 * [Pillow](https://pillow.readthedocs.io)
 * [django-phonenumber-field](https://pypi.org/project/django-phonenumber-field/)
-* [phonenumbers](https://pypi.org/project/phonenumbers/)
 * [bootstrap](https://pypi.org/project/bootstrap-py/)
  
  <p align="right">(<a href="#top">back to top</a>)</p>
@@ -97,31 +96,53 @@ This is list of software that you need to run SnapVisite project and how to inst
    ```
 2. Install python packages using terminal with command:
    ```sh
-   Easy method:
    pip install -r requirements.txt
-   
-   Detailed method:
-   pip install python-decouple
-   
-   python3 -m pip install --upgrade Pillow
-   
-   pip install django-phonenumber-field[phonenumbers]
-   
-   pip install phonenumbers
-   
-   pip install bootstrap-py
    ```
 3. Make your secret key in settings.py     
    ```js
-
    In the folder containing the manage.py file, create an .env file.
 
-   
    Add to .env file variables used in settings.py config: 
        SECRET_KEY = example_name
        DEBUG = False
    ```
+4. Migrate.     
+   ```js
+   Open Terminal and be sure that you are in folder 
+   containing the manage.py file
+   
+   Use command:
+   python manage.py migrate
+   ```
 
+5. Load data from fixtures.     
+   ```js
+   Open Terminal and be sure that you are in folder 
+   containing the manage.py file
+   
+   Use command:
+   python manage.py loaddata category_data.json
+   ```
+6. Run server.     
+   ```js
+   Open Terminal and be sure that you are in folder 
+   containing the manage.py file
+   
+   Use command:
+   python manage.py runserver 8000
+   
+   Open project in your website:
+   http://127.0.0.1:8000/
+   ```
+   
+### Tests
+
+
+* pytest
+  ```sh
+  Put in your terminal command:
+  pytest
+  ```
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
@@ -139,46 +160,41 @@ The "SnapVisit" service is designed to make it easier for service providers to c
 <!-- FEATURES -->
 ## Features
 
-- [ ] Registration of new service providers
-- - [ ] Accepting registered service providers
-- - [ ] Removing users as a service provider 
-- - [ ] Creation of a corporate account management panel
-- - [ ] Personalization of the service provider panel
-- - [ ] Adding a list of services and a price list
-- - [ ] Adding a location and address
-- - [ ] Editing the schedule
-- - [ ] Confirming appointments
-- - [ ] Check date and time details
-- - [ ] Feedback system
-- [ ] Registration of users as recipients of services 
-- - [ ] Deleting users as a recipient of services 
-- - [ ] Edit individual account management panel
-- - [ ] Adding and editing comments for companies
-- - [ ] Adding company reviews
-- - [ ] Booking appointments with a provider
-- - [ ] Option to pay for the service
-- - [ ] Ability to view future visits
-- - [ ] Finding service providers
-- - [ ] Cancellation of appointment
-- [ ] Accepting registered service providers
-- - [ ] Removing users as a service provider 
+-  Registration of new service providers
+- -  Accepting registered service providers
+- -  Removing users as a service provider 
+- -  Creation of a corporate account management panel
+- -  Personalization of the service provider panel
+- -  Adding a list of services and a price list
+- -  Adding a location and address
+- -  Editing the schedule
+- -  Confirming appointments
+- -  Check date and time details
+- -  Feedback system
+-  Registration of users as recipients of services 
+- -  Deleting users as a recipient of services 
+- -  Edit individual account management panel
+- -  Adding and editing comments for companies
+- -  Adding company reviews
+- -  Booking appointments with a provider
+- -  Option to pay for the service
+- -  Ability to view future visits
+- -  Finding service providers
+- -  Cancellation of appointment
+-  Accepting registered service providers
+- -  Removing users as a service provider 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-No license.
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [group-three-sda](https://github.com/group-three-sda) - example-group-three-mail@gmail.com
+Contributors:
+
+https://github.com/kacperkrasnal
+
+https://github.com/Marcin-Chudzik
 
 Project Link: [https://github.com/group-three-sda/final-project](https://github.com/group-three-sda/final-project)
 <p align="right">(<a href="#top">back to top</a>)</p>
