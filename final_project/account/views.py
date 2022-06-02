@@ -21,7 +21,7 @@ class CreateProfileView(SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.save()
-        account_confirmation_mail(obj.user_name, obj.email, obj.id)
+        #account_confirmation_mail(obj.user_name, obj.email, obj.id)
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
 
 
