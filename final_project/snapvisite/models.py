@@ -23,7 +23,7 @@ def save_photo(instance, filename):
 
 
 class Company(models.Model):
-    company_name = models.CharField(max_length=17)
+    company_name = models.CharField(max_length=35)
     photo = models.ImageField(blank=True, null=True, upload_to=save_photo)
     description = models.TextField(blank=True, null=True, max_length=310)
     created_date = models.DateTimeField(auto_now_add=True)
