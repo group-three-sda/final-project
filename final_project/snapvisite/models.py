@@ -1,5 +1,6 @@
 import uuid
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from account.models import Profile
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
@@ -84,6 +85,13 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f'{self.company} {self.day_of_week}'
+
+
+@receiver(post_save, sender=Company)
+def company_created_add_schedule(sender, instance, created, *args, **kwargs):
+    if created:
+        for schedule_day in range(len(Schedule.DAYS)):
+            Schedule.objects.create(day_of_week=Schedule.DAYS[schedule_day][0], company=instance)
 
 
 class Service(models.Model):

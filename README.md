@@ -102,7 +102,7 @@ This is list of software that you need to run SnapVisite project and how to inst
 
    Add to .env file variables used in settings.py config: 
        SECRET_KEY = example_name
-       DEBUG = False
+       DEBUG = True
    ```
 4. Migrate.     
    ```js

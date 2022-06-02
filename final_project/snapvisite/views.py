@@ -155,7 +155,6 @@ class ScheduleView(extra_views.ModelFormSetView):
         "extra": len(Schedule.DAYS),
         "max_num": 7,
         "can_delete": False}
-    initial = [{'day_of_week': Schedule.DAYS[x][0]} for x in range(len(Schedule.DAYS))]
 
     def formset_valid(self, formset):
         for form in formset:
