@@ -45,7 +45,7 @@
             </ul>
         </nav>
     {% for company_day in days %}
-        <div class="col">
+        <div class="col" style="max-width: calc(100% / 7)">
             <a href="{% url 'snapvisite:delete_company_day' company_day.id object.id %}"><button style="width: 3px; height: 3px" type="button" class="btn-close" aria-label="Close"></button></a>
             <h3>{{  company_day.date|date:"d-m-Y" }}</h3>
             <h4>{{  company_day.date|date:"l" }}</h4>
