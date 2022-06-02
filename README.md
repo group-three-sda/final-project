@@ -8,7 +8,7 @@
 <h3 align="center">SnapVisite</h3>
 
   <p align="center">
-    Final project of SDA python course: ZDPYTpol45
+    Snap your visit right now!
     
   </p>
 </div>
@@ -34,7 +34,6 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#features">Features</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     
   </ol>
@@ -58,7 +57,6 @@ The site allows the service provider to show available appointments and individu
 * [django](https://www.djangoproject.com/)
 * [python-decouple](https://pypi.org/project/python-decouple/)
 * [Pillow](https://pillow.readthedocs.io)
-* [django-phonenumber-field](https://pypi.org/project/django-phonenumber-field/)
 * [bootstrap](https://pypi.org/project/bootstrap-py/)
  
  <p align="right">(<a href="#top">back to top</a>)</p>
