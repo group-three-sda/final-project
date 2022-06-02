@@ -17,7 +17,7 @@ fake = Faker()
     [
         ('Firma1', [1], True),
         ('Firma2', [1, 2], True),
-        ('Firma321312313121231231', [1], False),  # Too long company_name
+        ('Firma321312313121231231asdadsasdasdasdads asdas', [1], False),  # Too long company_name
         ('Firma3', [1, 2, 3], False),  # In db exist only 2 categories
         ('Firma4', [], False)  # Minimum one category is needed.
     ],
