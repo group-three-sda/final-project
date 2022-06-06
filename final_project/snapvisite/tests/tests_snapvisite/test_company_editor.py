@@ -1,12 +1,8 @@
-import datetime
-
 import pytest
 
 from django.contrib.auth import get_user_model
 from faker import Faker
-from snapvisite.models import Company, Category
-from snapvisite.forms import CreateCompanyFirstStepForm, EditCategoriesForm, AddressForm, UpdateCompanyNameForm,\
-    ScheduleDayForm
+from snapvisite.forms import CreateCompanyFirstStepForm, EditCategoriesForm, AddressForm, UpdateCompanyNameForm
 
 profile = get_user_model()
 fake = Faker()
