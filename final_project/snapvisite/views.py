@@ -426,7 +426,7 @@ class CreateAppointmentView(CreateView):
         Thank you for using our service!"
         from_email = settings.EMAIL_HOST_USER
         to_email = [self.request.user.email, ]
-        #send_mail(subject, message, from_email, to_email)
+        send_mail(subject, message, from_email, to_email)
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
 
 
