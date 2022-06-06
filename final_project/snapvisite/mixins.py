@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 
 
 class OwnerAccessMixin(UserPassesTestMixin):
@@ -12,5 +13,8 @@ class UserConfirmMixin(UserPassesTestMixin):
 
     def test_func(self):
         obj = self.get_object()
-        if obj.confirm:
+        confirmed = obj.confirm
+        if not confirmed:
+            raise PermissionDenied
+        else:
             return True

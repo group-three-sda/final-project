@@ -1,9 +1,11 @@
 import datetime
 
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect, Http404
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView, View
 from snapvisite.mixins import UserConfirmMixin
 from snapvisite.models import Appointment
 
@@ -25,12 +27,23 @@ class CreateProfileView(SuccessMessageMixin, CreateView):
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
 
 
+class ResendConfirmationMail(SuccessMessageMixin, View):
+    success_message = 'Confirmation link sent successfully on your account email.'
+
+    def get(self, *args):
+        user = self.request.user
+        account_confirmation_mail(user.user_name, user.email, user.id)
+        return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
+
+
 class DetailProfileView(UserConfirmMixin, DetailView):
     model = Profile
 
     def test_func(self):
-        user = self.request.user
-        if user.confirm:
+        confirmed = self.request.user.confirm
+        if not confirmed:
+            raise PermissionDenied
+        else:
             return True
 
 
@@ -70,3 +83,7 @@ class ConfirmEmailView(UpdateView):
         user.confirm = True
         user.save()
         return HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))
+
+
+def custom_error_403(request, exception):
+    return render(request, 'account/403.html')
