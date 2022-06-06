@@ -49,8 +49,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     phone_number = PhoneNumberField(blank=True, null=True)
-    # It sending mail to confirm email.
-    confirm = models.BooleanField(default=True)
+    # It's sending mail to confirm email.
+    confirm = models.BooleanField(default=False)
 
     objects = CustomAccountManager()
 

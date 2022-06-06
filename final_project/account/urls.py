@@ -1,9 +1,8 @@
 from django.contrib.auth import views as auth_views
-from django.urls import path
-from django.urls import reverse_lazy
+from django.urls import path, reverse_lazy
 
-from .views import CheckAppointmentsView, CreateProfileView, DetailProfileView, UpdateProfileView, ConfirmEmailView
-
+from .views import CheckAppointmentsView, CreateProfileView, DetailProfileView, UpdateProfileView, ConfirmEmailView,\
+    ResendConfirmationMail
 app_name = 'account'
 
 urlpatterns = [
@@ -14,4 +13,5 @@ urlpatterns = [
     path('profile-edit/<int:pk>/', UpdateProfileView.as_view(), name='profile_edit'),
     path('appointment-profile/<int:pk>/', CheckAppointmentsView.as_view(), name='appointments_user'),
     path('mail-confirmation/<int:pk>/', ConfirmEmailView.as_view(), name='confirm_mail'),
+    path('confirm/resend/', ResendConfirmationMail.as_view(), name='confirm_resend'),
 ]
