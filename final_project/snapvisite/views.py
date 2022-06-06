@@ -1,6 +1,4 @@
 import extra_views
-import datetime
-
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -42,6 +40,7 @@ class CreateCompanyFirstStepView(LoginRequiredMixin, UserConfirmMixin, CreateVie
         obj = form.save(commit=False)
         obj.owner = self.request.user
         obj.save()
+        """!!!THIS STILL NEEDS TO BE HERE???"""
         obj = form.save_m2m()
         return HttpResponseRedirect(reverse_lazy('snapvisite:company_panel'))
 
@@ -65,7 +64,7 @@ class EditCompanyNameView(OwnerAccessMixin, SuccessMessageMixin, UpdateView):
     model = Company
     form_class = UpdateCompanyNameForm
     template_name = "snapvisite/company_editor.html"
-    success_message = 'Company name chenged successfully'
+    success_message = 'Company name changed successfully'
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -219,33 +218,33 @@ class UpdateContactView(UpdateView):
 
 class CompanyListSearchView(View):
 
-    def post(self, request):
+    def post(self, *args):
         """
         Select box with categories with value category_id
-        button CATEGORIES have value == 0 and it mean search in all categories.
+        button CATEGORIES have value == 0, and it means search in all categories.
         """
         all_categories_id = 0
-        if 'category' in request.POST:
-            category_id = int(request.POST['category'])
+        if 'category' in self.request.POST:
+            category_id = int(self.request.POST['category'])
         else:
             category_id = all_categories_id
 
         if category_id != all_categories_id:
-            if request.POST['city']:
-                searched_city = request.POST['city']
+            if self.request.POST['city']:
+                searched_city = self.request.POST['city']
                 company_list = Company.objects.filter(
                     category__id=category_id, address__city__icontains=searched_city)
             else:
                 company_list = Company.objects.filter(category__id=category_id)
-            return render(request, 'snapvisite/company_list.html', {'company_list': company_list})
+            return render(self.request, 'snapvisite/company_list.html', {'company_list': company_list})
         else:
-            if request.POST['city']:
-                searched_city = request.POST['city']
+            if self.request.POST['city']:
+                searched_city = self.request.POST['city']
                 company_list = Company.objects.filter(
                     address__city__icontains=searched_city)
             else:
                 company_list = Company.objects.all()
-            return render(request, 'snapvisite/company_list.html', {'company_list': company_list})
+            return render(self.request, 'snapvisite/company_list.html', {'company_list': company_list})
 
 
 class CompanyUserView(UserConfirmMixin, DetailView):
@@ -325,7 +324,7 @@ class CompanyTerminalView(OwnerAccessMixin, DetailView):
     template_name = "snapvisite/terminal.html"
 
     def get_context_data(self, **kwargs):
-        data = super().get_context_data()
+        data = super().get_context_data(**kwargs)
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
         page = self.request.GET.get('page')
