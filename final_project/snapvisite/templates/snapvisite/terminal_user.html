@@ -22,6 +22,23 @@
             </ul>
         </nav>
     {% for day in days %}
+        {% if day.date == today %}
+        <div class="col" style="max-width: calc(100% /7)">
+            <h3>{{ day.date|date:"d-m-Y" }}</h3>
+            <h4>{{  day.date|date:"l" }}</h4>
+            {% for timeslot in day.timeslot_set.all %}
+            {% if time_now|time:"H:i" < timeslot.start_time|time:"H:i" %}
+            <div class="list-group">
+                {% if timeslot.status %}
+                <a href="{% url 'snapvisite:create-appointment' service_id timeslot.id %}" class="list-group-item list-group-item-action list-group-item-success">
+                    {{ timeslot.start_time|time:"H:i" }}
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% else %}
         <div class="col" style="max-width: calc(100% /7)">
             <h3>{{  day.date|date:"d-m-Y" }}</h3>
             <h4>{{  day.date|date:"l" }}</h4>
@@ -35,6 +52,7 @@
             </div>
             {% endfor %}
         </div>
+        {% endif %}
 
     {% endfor %}
     </div>

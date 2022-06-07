@@ -396,6 +396,8 @@ class UserTerminal(UserConfirmMixin, DetailView):
         today = datetime.datetime.now()
         now = datetime.date(int(today.year), int(today.month), int(today.day))
         page = self.request.GET.get('page')
+        data['today'] = now
+        data['time_now'] = today
         data['days'] = Paginator(CompanyDay.objects.filter(company__id=self.kwargs["pk"], date__gte=now), 7).get_page(
             page)
 
@@ -444,8 +446,8 @@ class SendMailToCompany(FormView):
     template_name = 'snapvisite/send_mail.html'
 
     def form_valid(self, form):
-        subject = form.cleaned_data["subject"]
-        message = form.cleaned_data["message"]
+        subject = f'{self.request.user.email}: {form.cleaned_data["subject"]}'
+        message = f'{form.cleaned_data["message"]}'
         from_email = self.request.user.email
         to_email = [Company.objects.get(id=self.kwargs["company_id"]).email, ]
         send_mail(subject, message, from_email, to_email)
