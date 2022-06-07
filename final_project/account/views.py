@@ -40,11 +40,15 @@ class DetailProfileView(UserConfirmMixin, DetailView):
     model = Profile
 
     def test_func(self):
-        confirmed = self.request.user.confirm
-        if not confirmed:
-            raise PermissionDenied
-        else:
-            return True
+        try:
+            user = self.request.user
+            confirmed = user.confirm
+            if not confirmed:
+                raise PermissionDenied
+            elif confirmed:
+                return True
+        except AttributeError:
+            HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))
 
 
 class UpdateProfileView(UpdateView):
