@@ -1,3 +1,5 @@
+import datetime
+
 import extra_views
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -447,7 +449,11 @@ class SendMailToCompany(FormView):
 
     def form_valid(self, form):
         subject = f'{self.request.user.email}: {form.cleaned_data["subject"]}'
-        message = f'{form.cleaned_data["message"]}'
+        message = f'\
+        {datetime.datetime.now()}\n\
+        {form.cleaned_data["message"]}\n\
+        From User: {self.request.user.email}\n\
+        If u want to give feedback send email to email adress above.'
         from_email = self.request.user.email
         to_email = [Company.objects.get(id=self.kwargs["company_id"]).email, ]
         send_mail(subject, message, from_email, to_email)
