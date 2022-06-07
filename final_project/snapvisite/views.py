@@ -6,7 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView, View, DeleteView, FormView
 from django.core.exceptions import PermissionDenied
@@ -30,11 +30,15 @@ class CreateCompanyFirstStepView(LoginRequiredMixin, UserConfirmMixin, CreateVie
     template_name = 'snapvisite/create_company_first_step.html'
 
     def test_func(self):
-        confirmed = self.request.user.confirm
-        if not confirmed:
-            raise PermissionDenied
-        else:
-            return True
+        try:
+            user = self.request.user
+            confirmed = user.confirm
+            if not confirmed:
+                raise PermissionDenied
+            elif confirmed:
+                return True
+        except AttributeError:
+            HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))
 
     def form_valid(self, form):
         """
@@ -254,11 +258,15 @@ class CompanyUserView(UserConfirmMixin, DetailView):
     template_name = "snapvisite/company_user_detail.html"
 
     def test_func(self):
-        confirmed = self.request.user.confirm
-        if not confirmed:
-            raise PermissionDenied
-        else:
-            return True
+        try:
+            user = self.request.user
+            confirmed = user.confirm
+            if not confirmed:
+                raise PermissionDenied
+            elif confirmed:
+                return True
+        except AttributeError:
+            HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -385,11 +393,15 @@ class UserTerminal(UserConfirmMixin, DetailView):
     template_name = 'snapvisite/terminal_user.html'
 
     def test_func(self):
-        confirmed = self.request.user.confirm
-        if not confirmed:
-            raise PermissionDenied
-        else:
-            return True
+        try:
+            user = self.request.user
+            confirmed = user.confirm
+            if not confirmed:
+                raise PermissionDenied
+            elif confirmed:
+                return True
+        except AttributeError:
+            HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data()

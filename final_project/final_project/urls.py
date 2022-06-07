@@ -26,6 +26,7 @@ urlpatterns = [
     path('account/', include('django.contrib.auth.urls'))
 ]
 
+"""Overriding 403 error with custom view."""
 handler403 = 'account.views.custom_error_403'
 
 if settings.DEBUG:
