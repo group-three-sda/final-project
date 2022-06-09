@@ -451,7 +451,7 @@ class CreateAppointmentView(CreateView):
         Thank you for using our service!"
         from_email = settings.EMAIL_HOST_USER
         to_email = [self.request.user.email, ]
-        send_mail(subject, message, from_email, to_email)
+        #send_mail(subject, message, from_email, to_email)
         return HttpResponseRedirect(reverse_lazy('snapvisite:home-page'))
 
 
@@ -468,5 +468,5 @@ class SendMailToCompany(FormView):
         If u want to give feedback send email to email adress above.'
         from_email = self.request.user.email
         to_email = [Company.objects.get(id=self.kwargs["company_id"]).email, ]
-        send_mail(subject, message, from_email, to_email)
+        #send_mail(subject, message, from_email, to_email)
         return HttpResponseRedirect(reverse_lazy("snapvisite:home-page"))
