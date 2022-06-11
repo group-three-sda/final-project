@@ -90,6 +90,11 @@ class ScheduleDayForm(forms.ModelForm):
         cleaned_data = super().clean()
         open_time = cleaned_data.get("open_time")
         close_time = cleaned_data.get("close_time")
+        if open_time and not close_time:
+            raise ValidationError({"close_time": "You have to define close time"})
+        if close_time and not open_time:
+            raise ValidationError({"open_time": "You have to define open time"})
+
         if isinstance(open_time, datetime.time):
             if open_time > close_time:
                 raise ValidationError({"open_time": "Start time have to be lower than end time"})

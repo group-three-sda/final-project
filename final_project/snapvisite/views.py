@@ -154,22 +154,21 @@ class UpdateAddressView(UserPassesTestMixin, SuccessMessageMixin, UpdateView):
         return obj.company.owner == self.request.user
 
 
-class ScheduleView(extra_views.ModelFormSetView):
-    template_name = 'snapvisite/schedule.html'
-    pk_url_kwarg = 'company_id'
+class ScheduleListView(ListView):
     model = Schedule
-    factory_kwargs = {
-        "form": ScheduleDayForm,
-        "extra": len(Schedule.DAYS),
-        "max_num": 7,
-        "can_delete": False}
 
-    def formset_valid(self, formset):
-        for form in formset:
-            form.instance.company_id = self.kwargs['company_id']
-            obj = form.save(commit=False)
-            obj.save()
-        return HttpResponseRedirect(reverse('snapvisite:your_company', kwargs={"pk": self.kwargs['company_id']}))
+    def get_queryset(self):
+        return Schedule.objects.filter(company=self.kwargs['company_id'])
+
+
+class ScheduleUpdateView(UpdateView):
+    model = Schedule
+    form_class = ScheduleDayForm
+    template_name = "snapvisite/company_editor.html"
+
+    def get_success_url(self):
+        company_id = self.kwargs['company_id']
+        return reverse('snapvisite:schedule_company', kwargs={"company_id": company_id})
 
 
 class CreateServiceView(UserPassesTestMixin, CreateView):

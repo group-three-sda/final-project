@@ -9,6 +9,16 @@ def all_categories():
     return Category.objects.all()
 
 
+@register.filter(name='times')
+def times(number):
+    return range(number)
+
+
+@register.simple_tag
+def define(val=None):
+  return val
+
+
 @register.filter('duration_format')
 def duration_format(value):
     hours = int(value/60)
